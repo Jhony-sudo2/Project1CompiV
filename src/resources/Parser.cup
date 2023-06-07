@@ -1,5 +1,5 @@
 
-class Praser;
+class Parser;
 
 parser code {:
 	public Parser(Lexer lexer){
@@ -65,7 +65,10 @@ mientras        ::= MIENTRAS PAREN_O    PAREN_C {::}
 leer            ::= LEER PAREN_O mensaje PAREN_C    {::}
                 ;
 
-mensaje         ::= 
+mensaje         ::= ID      {::}
+                |   INT     {::}
+                |   
+                ;
                 
 escribir        ::=
                 ;
