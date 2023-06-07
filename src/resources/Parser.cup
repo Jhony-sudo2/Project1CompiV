@@ -1,0 +1,72 @@
+
+class Praser;
+
+parser code {:
+	public Parser(Lexer lexer){
+		super(lexer);
+	}
+:}
+
+
+//TERMINALES
+terminal Token ENTERO,CADENA,DECIMAL,SI,SINO,ID,INT,FLOAT,PAREN_O,PAREN_C,PCOMA,ADD,MENOS,
+MULT,IGUAL,COMILLA,LEER,ESCRIBIR,MIENTRAS,MAYOR,MENOR,IGUALC,PARA;
+
+//NO TERMINALES
+non terminal Initial,production,asignacion,si,para,mientras,leer,escribir,tipo,valor,
+condicion,mensaje;
+
+start with Initial;
+
+
+/****GRAMATICA*****/
+
+Initial         ::= production PCOMA Initial    {::}
+                |   bucle Initial               {::}    
+                |   Production                  {::}
+                |   bucle
+                ;
+
+production      ::= asignacion          {::}
+                |   leer                {::}
+                |   escribir            {::}
+                ;
+
+bucle           ::= si                  {::}
+                |   mientras            {::}
+                |   para                {::}
+                ;
+
+tipo            ::= ENTERO  {::}
+                |   CADENA  {::}
+                |   DECIMAL {::}
+                ;
+
+valor           ::= INT     {::}
+                |   FLOAT   {::}
+                ;
+
+asginacion      ::= tipo ID IGUAL valor {::} 
+                ;
+
+si              ::= SI PAREN_O  condicion PAREN_C production  {::}
+                ;
+
+condicion       ::= ID IGUALC IGUALC ID         {::}
+                |   ID MAYOR ID                 {::}
+                |   ID MENOR ID                 {::}  
+                ;
+para            ::= PARA PAREN_O    PAREN_C {::}
+                ;
+
+mientras        ::= MIENTRAS PAREN_O    PAREN_C {::}
+                ;
+
+leer            ::= LEER PAREN_O mensaje PAREN_C    {::}
+                ;
+
+mensaje         ::= 
+                
+escribir        ::=
+                ;
+
