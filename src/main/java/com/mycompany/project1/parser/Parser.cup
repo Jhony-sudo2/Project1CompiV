@@ -10,6 +10,10 @@ parser code {:
 	public Parser(Lexer lexer){
 		super(lexer);
 	}
+        
+        public Manejador getM(){
+            return m;
+        }
 
         public String getSalida(){
             return m.getMensaje();
@@ -53,11 +57,11 @@ terminal String STRING,ID;
 
 
 //NO TERMINALES
-non terminal asignacion,mientras,bucle,pr2;
+non terminal mientras,bucle,pr2;
 
 non terminal Integer op,tipo,para,condicion,si;
 
-non terminal Operacion production,pr,Initial;
+non terminal Operacion production,pr,Initial,asignacion;
 
 non terminal String mensaje,escribir,leer,operacion,a,b,c;
 
@@ -76,17 +80,17 @@ Initial         ::= pr2 Initial                  {::}
 pr              ::= production:n1 PCOMA            {:RESULT = n1;:}
                 ;
 
-pr2             ::= production:n1 PCOMA          {:m.Operacion(n1.getTipo(),n1.getMensaje());:}
+pr2             ::= production:n1 PCOMA          {:m.Operacion(n1);:}
                 ;
 
-production      ::= asignacion:n1          {:RESULT = new Operacion(3,"NO");:}
+production      ::= asignacion:n1          {:RESULT = n1;:}
                 |   leer:n1                {:RESULT = new Operacion(1,n1);:}
                 |   escribir:n1            {:RESULT = new Operacion(2,n1);:}
                 ;
 
 bucle           ::= si                                 {::}
                 |   mientras pr:n1                     {::}
-                |   para:n1 pr:n2                      {:for(int i=0;i<n1;i++){m.Operacion(n2.getTipo(),n2.getMensaje());}:}
+                |   para:n1 pr:n2                      {:for(int i=0;i<n1;i++){m.Operacion(n2);}:}
                 ;
 
 tipo            ::= ENTERO:n1  {:RESULT = 1;:}
@@ -94,13 +98,13 @@ tipo            ::= ENTERO:n1  {:RESULT = 1;:}
                 |   DECIMAL:n1 {:RESULT = 2;:}
                 ;
 
-asignacion      ::= tipo:n2 ID:n1 IGUAL mensaje:n3   {:m.Asignacion(n1,n3,n2);:}
-                |   tipo:n2 ID:n1                    {:m.Asignacion(n1,null,n2);:}
-                |   ID:n1 IGUAL mensaje:n2           {:m.Actualizar(n1,n2);:}
+asignacion      ::= tipo:n2 ID:n1 IGUAL mensaje:n3   {:m.Asignacion(n1,n3,n2);RESULT = new Operacion(4," c"," ");:}
+                |   tipo:n2 ID:n1                    {:m.Asignacion(n1,null,n2);RESULT = new Operacion(4," "," ");:}
+                |   ID:n1 IGUAL mensaje:n2           {:RESULT = new Operacion(3,n1,n2);:}
                 ;
 
-si              ::= SI condicion:n1 pr:n2   {:if(n1==1)m.Operacion(n2.getTipo(),n2.getMensaje()); RESULT = n1;:}
-                |   si:n1 SINO pr:n2        {:if(n1==2) m.Operacion(n2.getTipo(),n2.getMensaje());:}
+si              ::= SI condicion:n1 pr:n2   {:if(n1==1)m.Operacion(n2); RESULT = n1;:}
+                |   si:n1 SINO pr:n2        {:if(n1==2) m.Operacion(n2);:}
                 ;
 
 condicion       ::= PAREN_O mensaje:n1 op:n3 mensaje:n2 PAREN_C         {:RESULT = m.Condicion(n1,n2,n3);:} 

@@ -466,10 +466,10 @@ public class Lexer implements java_cup.runtime.Scanner {
   private int zzFinalHighSurrogate = 0;
 
   /* user code: */
-	
+    /*
     private Symbol token(int type,String Value){
         return new Symbol(type, new Token(Value,yyline+1,yycolumn+1,type));
-    }
+    }*/
 
     private Symbol token(int Type){
         return new Symbol(Type,new Token(yyline+1,yycolumn+1,Type));

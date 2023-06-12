@@ -11,16 +11,18 @@ import java_cup.runtime.Symbol;
 
 //Java code
 %{
-    /*
-    private Symbol token(int type,String Value){
-        return new Symbol(type, new Token(Value,yyline+1,yycolumn+1,type));
-    }*/
+    String Errores = "";
+    
 
     private Symbol token(int Type){
         return new Symbol(Type,new Token(yyline+1,yycolumn+1,Type));
     }
     private Symbol token(int type, Object value) {
         return new Symbol(type, yyline+1, yycolumn+1, value);
+    }
+
+    public String getErrores(){
+        return Errores;
     }
     
 
@@ -70,4 +72,4 @@ String		= "\"" [^*] ~"\""
 "<="            {return token(MENORIG);}
 "<"		{return token(MENOR);}
 "!="            {return token(DIFERENTE);}
-[^]		{System.out.println("Error con : " + yytext());}
+[^]		{Errores +=  "\n" + "Simbolo no reconocido: " + yytext() + " linea: " + yyline+1;}

@@ -128,6 +128,7 @@ public class Main extends javax.swing.JFrame {
         parser = new Parser(lexer);
         try{
             parser.parse();
+            parser.getM().Error(lexer.getErrores());
             Salida.setText("");
             Salida.setText(parser.getSalida());
           

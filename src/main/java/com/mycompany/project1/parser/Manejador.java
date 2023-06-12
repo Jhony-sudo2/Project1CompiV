@@ -105,9 +105,17 @@ public class Manejador {
     }
     
     
-    public void Operacion(int Opcion,String T){
+    public void Operacion(Operacion op){
+        String T = op.getMensaje();
+        int Opcion = op.getTipo();
         if(Opcion == 2) Escribir(T);
         else if(Opcion == 1)Leer(T);
+        else if(Opcion == 3){
+            String Valor = op.getValor();
+            
+            System.out.println("OPERANDO VARIABLE: " + T +"  VALOR: " + Valor);
+            Actualizar(T,Valor);
+       }
          
     }
     
