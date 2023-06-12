@@ -41,7 +41,7 @@ public class Manejador {
                 tabla.Actualizar(Valor, Nombre);
                 System.out.println("VARIABLE: " + Nombre + " actualizada a: " + Valor);
             }else{
-                Error("Los tipos de valor no coinciden");
+                Error("El tipo de dato no es compatible con la variable: " + Nombre);
             }
         }else Error("La variable: " + Nombre + " no existe");
         
@@ -57,7 +57,7 @@ public class Manejador {
                 tabla.Add(Var, Tipo, Valor);
                 System.out.println("VARIABLE: " + Var + " creada con valor: " + Valor);
             }else{
-                
+                Error("El tipo de dato no es compatible con la variable: " + Var);
             }
         }else Error("La variable: " + Var + " no existe");
         
@@ -151,7 +151,7 @@ public class Manejador {
     public boolean Comparar(int Tipo,String Valor){
         return switch (Tipo) {
             case 1 -> isInt(Valor);
-            case 2 -> isDouble(Valor);
+                case 2 -> isDouble(Valor);
             case 3 -> isString(Valor);
             default -> false;
         };

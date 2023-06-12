@@ -1,6 +1,6 @@
 package com.mycompany.project1.parser;
 import com.mycompany.project1.tablasimbolos.Tabla;
-
+import com.mycompany.project1.operaciones.Operador;
 class Parser;
 
 parser code {:
@@ -10,6 +10,10 @@ parser code {:
 	public Parser(Lexer lexer){
 		super(lexer);
 	}
+        
+        public Manejador getM(){
+            return m;
+        }
 
         public String getSalida(){
             return m.getMensaje();
@@ -17,11 +21,17 @@ parser code {:
 
         @Override
         public void syntax_error(java_cup.runtime.Symbol s){
-            Token T = (Token) s.value;
-            if(T.getValue() != null)
-            System.out.println("Error con: " + T.getValue());
-            else
-            System.out.println("Error con: " + T.getType());
+            try{
+                Token T = (Token) s.value;
+                if(T.getValue() != null)
+                m.Error("Error con: " + T.getValue() + " LINEA: " + T.getLine());
+                else
+                m.Error("Error con: " + ParserSym.terminalNames[T.getType()] + " LINEA: " + T.getLine());
+            }catch(Exception e){
+                
+                m.Error("Error con: " + s.value + " LINEA: " + s.left);
+                
+            }
         } 
         
         @Override
@@ -47,36 +57,40 @@ terminal String STRING,ID;
 
 
 //NO TERMINALES
-non terminal Initial,asignacion,mientras,bucle;
+non terminal mientras,bucle,pr2;
 
 non terminal Integer op,tipo,para,condicion,si;
 
-non terminal Operacion production,pr;
+non terminal Operacion production,pr,Initial,asignacion;
 
-non terminal Double operacion,a,b,c;
-
-non terminal String mensaje,escribir,leer;
+non terminal String mensaje,escribir,leer,operacion,a,b,c;
 
 start with Initial;
 
 
 /****GRAMATICA*****/
 
-Initial         ::= pr Initial                  {::}
-                |   bucle Initial               {::}    
-                |   pr                          {::}
+Initial         ::= pr2 Initial                  {::}
+                |   bucle Initial                {::}
+                |   bucle                        {::}
+                |   pr2                          {::}
                 ;
+
 
 pr              ::= production:n1 PCOMA            {:RESULT = n1;:}
                 ;
-production      ::= asignacion:n1          {::}
-                |   leer:n1                {:m.Leer(n1); RESULT = new Operacion(1,n1);:}
-                |   escribir:n1            {:m.Escribir(n1); RESULT = new Operacion(2,n1);:}
+
+pr2             ::= production:n1 PCOMA          {:m.Operacion(n1);:}
+                ;
+
+production      ::= asignacion:n1          {:RESULT = n1;:}
+                |   leer:n1                {:RESULT = new Operacion(1,n1);:}
+                |   escribir:n1            {:RESULT = new Operacion(2,n1);:}
                 ;
 
 bucle           ::= si                                 {::}
                 |   mientras pr:n1                     {::}
-                |   para:n1 pr:n2                      {:for(int i=0;i<n1;i++){m.Operacion(n2.getTipo(),n2.getMensaje());}:}
+                |   para:n1 pr:n2                      {:for(int i=0;i<n1;i++){m.Operacion(n2);}:}
                 ;
 
 tipo            ::= ENTERO:n1  {:RESULT = 1;:}
@@ -84,13 +98,13 @@ tipo            ::= ENTERO:n1  {:RESULT = 1;:}
                 |   DECIMAL:n1 {:RESULT = 2;:}
                 ;
 
-asignacion      ::= tipo:n2 ID:n1 IGUAL mensaje:n3   {:m.Asignacion(n1,n3,n2);:}
-                |   tipo:n2 ID:n1                    {:m.Asignacion(n1,null,n2);:}
-                |   ID:n1 IGUAL mensaje:n2           {:m.Actualizar(n1,n2);:}
+asignacion      ::= tipo:n2 ID:n1 IGUAL mensaje:n3   {:m.Asignacion(n1,n3,n2);RESULT = new Operacion(4," c"," ");:}
+                |   tipo:n2 ID:n1                    {:m.Asignacion(n1,null,n2);RESULT = new Operacion(4," "," ");:}
+                |   ID:n1 IGUAL mensaje:n2           {:RESULT = new Operacion(3,n1,n2);:}
                 ;
 
-si              ::= SI condicion:n1 pr:n2   {:if(n1==1)m.Operacion(n2.getTipo(),n2.getMensaje()); RESULT = n1;:}
-                |   si:n1 SINO pr:n2        {:if(n1==2) m.Operacion(n2.getTipo(),n2.getMensaje());:}
+si              ::= SI condicion:n1 pr:n2   {:if(n1==1)m.Operacion(n2); RESULT = n1;:}
+                |   si:n1 SINO pr:n2        {:if(n1==2) m.Operacion(n2);:}
                 ;
 
 condicion       ::= PAREN_O mensaje:n1 op:n3 mensaje:n2 PAREN_C         {:RESULT = m.Condicion(n1,n2,n3);:} 
@@ -104,7 +118,7 @@ op              ::= MAYOR                       {:RESULT = 1;:}
                 |   DIFERENTE                   {:RESULT = 6;:}
                 ;
 
-para            ::= PARA PAREN_O  INT:n1 COMA INT:n2  PAREN_C {:RESULT = Math.abs(n1-n2);:}
+para            ::= PARA PAREN_O  INT:n1 COMA INT:n2  PAREN_C {:RESULT = Math.abs(n1-n2);System.out.println("i: " + RESULT);:}
                 ;
 
 mientras        ::= MIENTRAS condicion  {::}
@@ -113,7 +127,7 @@ mientras        ::= MIENTRAS condicion  {::}
 leer            ::= LEER PAREN_O ID:n1 PAREN_C    {:RESULT = n1;:}
                 ;
 
-mensaje         ::= operacion:n1        {:RESULT = String.valueOf(n1);:}
+mensaje         ::= operacion:n1        {:RESULT =  n1;:}
                 |   STRING:n1           {:RESULT =  n1.substring(1,n1.length()-1);:}
                 ;
                 
@@ -121,20 +135,20 @@ escribir        ::= ESCRIBIR PAREN_O mensaje:n1 PAREN_C    {:RESULT = n1;:}
                 ;
 
 
-operacion       ::= a:n1  {:RESULT = n1;:}
+operacion       ::= a:n1  {:RESULT = Operador.Convertir(n1);:}
                 ;
 
-a               ::= a:n1 ADD b:n2   {:RESULT =n1 + n2; :}
-                |   a:n1 MENOS b:n2 {:RESULT =n1 - n2; :}
+a               ::= a:n1 ADD b:n2   {:RESULT = Operador.Op(n1,n2,1); :}
+                |   a:n1 MENOS b:n2 {:RESULT = Operador.Op(n1,n2,2); :}
                 |   b:n1            {:RESULT = n1;:} 
                 ;
 
-b               ::= b:n1 MULT c:n2   {:RESULT = n1*n2;:}
+b               ::= b:n1 MULT c:n2   {:RESULT = Operador.Op(n1,n2,3);:}
                 |   c:n1             {:RESULT = n1;:}
                 ;
 
-c               ::= INT:n1             {:RESULT = Double.parseDouble(String.valueOf(n1));:}
-                |   FLOAT:n1           {:RESULT = Double.parseDouble(String.valueOf(n1));:}
-                |   ID:n1              {:if(m.VerificarExistencia(n1)) RESULT = Double.parseDouble(String.valueOf(tabla.Buscar(n1).getValor()));
-                                         else System.out.println("LA VARIABLE NO EXISTE");:}
+c               ::= INT:n1             {:RESULT = String.valueOf(n1);:}
+                |   FLOAT:n1           {:RESULT = String.valueOf(n1);:}
+                |   ID:n1              {:if(!m.VerificarExistencia(n1)) RESULT = tabla.Buscar(n1).getValor();
+                                         else m.Error("La variable: " + n1 + " no existe");:}
                 ;

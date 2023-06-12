@@ -868,7 +868,7 @@ public class Lexer implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { Errores +=  "\n" + "Simbolo no reconocido: " + yytext() + " linea: " + yyline+1;
+            { Errores +=  "\n" + "Simbolo no reconocido: " + yytext() + " linea: " + (yyline+1);
             } 
             // fall through
           case 30: break;
