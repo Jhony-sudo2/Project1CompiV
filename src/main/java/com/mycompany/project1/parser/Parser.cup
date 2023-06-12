@@ -1,6 +1,6 @@
 package com.mycompany.project1.parser;
 import com.mycompany.project1.tablasimbolos.Tabla;
-
+import com.mycompany.project1.operaciones.Operador;
 class Parser;
 
 parser code {:
@@ -53,9 +53,7 @@ non terminal Integer op,tipo,para,condicion,si;
 
 non terminal Operacion production,pr,Initial;
 
-non terminal Double operacion,a,b,c;
-
-non terminal String mensaje,escribir,leer;
+non terminal String mensaje,escribir,leer,operacion,a,b,c;
 
 start with Initial;
 
@@ -119,7 +117,7 @@ mientras        ::= MIENTRAS condicion  {::}
 leer            ::= LEER PAREN_O ID:n1 PAREN_C    {:RESULT = n1;:}
                 ;
 
-mensaje         ::= operacion:n1        {:RESULT = String.valueOf(n1);:}
+mensaje         ::= operacion:n1        {:RESULT =  n1;:}
                 |   STRING:n1           {:RESULT =  n1.substring(1,n1.length()-1);:}
                 ;
                 
@@ -130,17 +128,17 @@ escribir        ::= ESCRIBIR PAREN_O mensaje:n1 PAREN_C    {:RESULT = n1;:}
 operacion       ::= a:n1  {:RESULT = n1;:}
                 ;
 
-a               ::= a:n1 ADD b:n2   {:RESULT =n1 + n2; :}
-                |   a:n1 MENOS b:n2 {:RESULT =n1 - n2; :}
+a               ::= a:n1 ADD b:n2   {:RESULT = Operador.Op(n1,n2,1); :}
+                |   a:n1 MENOS b:n2 {:RESULT = Operador.Op(n1,n2,2); :}
                 |   b:n1            {:RESULT = n1;:} 
                 ;
 
-b               ::= b:n1 MULT c:n2   {:RESULT = n1*n2;:}
+b               ::= b:n1 MULT c:n2   {:RESULT = Operador.Op(n1,n2,3);:}
                 |   c:n1             {:RESULT = n1;:}
                 ;
 
-c               ::= INT:n1             {:RESULT = Double.parseDouble(String.valueOf(n1));:}
-                |   FLOAT:n1           {:RESULT = Double.parseDouble(String.valueOf(n1));:}
-                |   ID:n1              {:if(!m.VerificarExistencia(n1)) RESULT = Double.parseDouble(String.valueOf(tabla.Buscar(n1).getValor()));
-                                         else System.out.println("LA VARIABLE NO EXISTE");:}
+c               ::= INT:n1             {:RESULT = String.valueOf(n1);:}
+                |   FLOAT:n1           {:RESULT = String.valueOf(n1);:}
+                |   ID:n1              {:if(!m.VerificarExistencia(n1)) RESULT = tabla.Buscar(n1).getValor();
+                                         else m.Error("La variable: " + n1 + " no existe");:}
                 ;

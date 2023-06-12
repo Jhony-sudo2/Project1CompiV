@@ -15,6 +15,8 @@ public class Project1 {
     public static void main(String[] args) {
         Main n = new Main();
         n.setVisible(true);
+        String P = "x"+2;
+        System.out.println(n);
         
     }
 }

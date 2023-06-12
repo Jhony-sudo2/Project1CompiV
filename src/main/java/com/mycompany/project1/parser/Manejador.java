@@ -6,9 +6,6 @@ package com.mycompany.project1.parser;
 
 import com.mycompany.project1.tablasimbolos.Tabla;
 import com.mycompany.project1.tablasimbolos.Variable;
-import com.mycompany.project1.ui.Leer;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 /**
  *
@@ -17,6 +14,7 @@ import javax.swing.JOptionPane;
 public class Manejador {
     private Tabla tabla;
     private String Salida = "";
+    private String Errores = "";
     
     
     public Manejador(Tabla tabla) {
@@ -43,9 +41,9 @@ public class Manejador {
                 tabla.Actualizar(Valor, Nombre);
                 System.out.println("VARIABLE: " + Nombre + " actualizada a: " + Valor);
             }else{
-                ReportarError();
+                Error("Los tipos de valor no coinciden");
             }
-        }
+        }else Error("La variable: " + Nombre + " no existe");
         
     }
     
@@ -61,13 +59,10 @@ public class Manejador {
             }else{
                 
             }
-        }else ReportarError();
+        }else Error("La variable: " + Var + " no existe");
         
     }
-    
-    public void ReportarError(){
-        
-    }
+   
     
     public boolean VerificarExistencia(String Var1){
         return tabla.Buscar(Var1) == null;
@@ -154,13 +149,12 @@ public class Manejador {
         };
     }
     
-    public  boolean isInt(String Value){
+    public static boolean isInt(String Value){
         try {
             Double numerp = Double.parseDouble(Value);
             int numero = numerp.intValue();
             return true;
         } catch (NumberFormatException e) {
-            System.out.println("El String no representa un número entero válido.");
             return false;
         }
     }
@@ -170,18 +164,23 @@ public class Manejador {
     }
     
     
-    public  boolean isDouble(String Value){
+    public  static boolean isDouble(String Value){
         try {
             double numero = Double.parseDouble(Value);
             return true;
         } catch (NumberFormatException e) {
-            System.out.println("El String no representa un número double válido.");
             return false;
         }
     }
     
     public String getMensaje(){
+        if(Errores.isEmpty())
         return this.Salida;
+        else return Errores;
+    }
+    
+    public void Error(String Mensaje){
+        Errores+=Mensaje;
     }
     
     
