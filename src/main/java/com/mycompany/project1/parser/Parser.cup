@@ -19,9 +19,9 @@ parser code {:
         public void syntax_error(java_cup.runtime.Symbol s){
             Token T = (Token) s.value;
             if(T.getValue() != null)
-            System.out.println("Error con: " + T.getValue());
+            System.out.println("Error con: " + T.getValue() + " LINEA: " + T.getLine() + " COLUMNA: " + T.getColumn());
             else
-            System.out.println("Error con: " + T.getType());
+            System.out.println("Error con: " + T.getType() + " LINEA: " + T.getLine() + " COLUMNA: " + T.getColumn());
         } 
         
         @Override
@@ -47,11 +47,11 @@ terminal String STRING,ID;
 
 
 //NO TERMINALES
-non terminal Initial,asignacion,mientras,bucle;
+non terminal asignacion,mientras,bucle,pr2;
 
 non terminal Integer op,tipo,para,condicion,si;
 
-non terminal Operacion production,pr;
+non terminal Operacion production,pr,Initial;
 
 non terminal Double operacion,a,b,c;
 
@@ -62,16 +62,22 @@ start with Initial;
 
 /****GRAMATICA*****/
 
-Initial         ::= pr Initial                  {::}
-                |   bucle Initial               {::}    
-                |   pr                          {::}
+Initial         ::= pr2 Initial                  {::}
+                |   bucle Initial                {::}
+                |   bucle                        {::}
+                |   pr2                          {::}
                 ;
+
 
 pr              ::= production:n1 PCOMA            {:RESULT = n1;:}
                 ;
-production      ::= asignacion:n1          {::}
-                |   leer:n1                {:m.Leer(n1); RESULT = new Operacion(1,n1);:}
-                |   escribir:n1            {:m.Escribir(n1); RESULT = new Operacion(2,n1);:}
+
+pr2             ::= production:n1 PCOMA          {:m.Operacion(n1.getTipo(),n1.getMensaje());:}
+                ;
+
+production      ::= asignacion:n1          {:RESULT = new Operacion(3,"NO");:}
+                |   leer:n1                {:RESULT = new Operacion(1,n1);:}
+                |   escribir:n1            {:RESULT = new Operacion(2,n1);:}
                 ;
 
 bucle           ::= si                                 {::}
@@ -104,7 +110,7 @@ op              ::= MAYOR                       {:RESULT = 1;:}
                 |   DIFERENTE                   {:RESULT = 6;:}
                 ;
 
-para            ::= PARA PAREN_O  INT:n1 COMA INT:n2  PAREN_C {:RESULT = Math.abs(n1-n2);:}
+para            ::= PARA PAREN_O  INT:n1 COMA INT:n2  PAREN_C {:RESULT = Math.abs(n1-n2);System.out.println("i: " + RESULT);:}
                 ;
 
 mientras        ::= MIENTRAS condicion  {::}
@@ -135,6 +141,6 @@ b               ::= b:n1 MULT c:n2   {:RESULT = n1*n2;:}
 
 c               ::= INT:n1             {:RESULT = Double.parseDouble(String.valueOf(n1));:}
                 |   FLOAT:n1           {:RESULT = Double.parseDouble(String.valueOf(n1));:}
-                |   ID:n1              {:if(m.VerificarExistencia(n1)) RESULT = Double.parseDouble(String.valueOf(tabla.Buscar(n1).getValor()));
+                |   ID:n1              {:if(!m.VerificarExistencia(n1)) RESULT = Double.parseDouble(String.valueOf(tabla.Buscar(n1).getValor()));
                                          else System.out.println("LA VARIABLE NO EXISTE");:}
                 ;

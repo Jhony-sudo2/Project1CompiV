@@ -466,14 +466,19 @@ public class Lexer implements java_cup.runtime.Scanner {
   private int zzFinalHighSurrogate = 0;
 
   /* user code: */
-	
+    /*	
     private Symbol token(int type,String Value){
         return new Symbol(type, new Token(Value,yyline+1,yycolumn+1,type));
     }
-
+    */
     private Symbol token(int Type){
         return new Symbol(Type,new Token(yyline+1,yycolumn+1,Type));
     }
+    private Symbol token(int type, Object objeto) {
+        return new Symbol(type, yyline+1, yycolumn+1, objeto);
+    }
+    
+
 
 
   /**
@@ -855,7 +860,8 @@ public class Lexer implements java_cup.runtime.Scanner {
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
             zzDoEOF();
-          { return new java_cup.runtime.Symbol(sym.EOF); }
+          {     return token(EOF);
+ }
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
@@ -865,17 +871,17 @@ public class Lexer implements java_cup.runtime.Scanner {
             // fall through
           case 30: break;
           case 2: 
-            { return token(ID,yytext());
+            { return token(ID,new String(yytext()));
             } 
             // fall through
           case 31: break;
           case 3: 
-            { return token(INT,yytext());
+            { return token(INT, Integer.valueOf(yytext()));
             } 
             // fall through
           case 32: break;
           case 4: 
-            { /*ignorar*/
+            { /*IGNORAR*/
             } 
             // fall through
           case 33: break;
@@ -955,7 +961,7 @@ public class Lexer implements java_cup.runtime.Scanner {
             // fall through
           case 48: break;
           case 20: 
-            { return token(FLOAT,yytext());
+            { return token(FLOAT, Double.valueOf(yytext()));
             } 
             // fall through
           case 49: break;
