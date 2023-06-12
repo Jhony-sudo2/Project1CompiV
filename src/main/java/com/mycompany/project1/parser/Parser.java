@@ -227,11 +227,17 @@ public class Parser extends java_cup.runtime.lr_parser {
 
         @Override
         public void syntax_error(java_cup.runtime.Symbol s){
-            Token T = (Token) s.value;
-            if(T.getValue() != null)
-            System.out.println("Error con: " + T.getValue() + " LINEA: " + T.getLine() + " COLUMNA: " + T.getColumn());
-            else
-            System.out.println("Error con: " + T.getType() + " LINEA: " + T.getLine() + " COLUMNA: " + T.getColumn());
+            try{
+                Token T = (Token) s.value;
+                if(T.getValue() != null)
+                m.Error("Error con: " + T.getValue() + " LINEA: " + T.getLine());
+                else
+                m.Error("Error con: " + ParserSym.terminalNames[T.getType()] + " LINEA: " + T.getLine());
+            }catch(Exception e){
+                
+                m.Error("Error con: " + s.value + " LINEA: " + s.left);
+                
+            }
         } 
         
         @Override
@@ -680,7 +686,7 @@ class CUP$Parser$actions {
 		int n1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int n1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String n1 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		RESULT = n1;
+		RESULT = Operador.Convertir(n1);
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("operacion",15, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

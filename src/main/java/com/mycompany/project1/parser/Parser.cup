@@ -17,11 +17,17 @@ parser code {:
 
         @Override
         public void syntax_error(java_cup.runtime.Symbol s){
-            Token T = (Token) s.value;
-            if(T.getValue() != null)
-            System.out.println("Error con: " + T.getValue() + " LINEA: " + T.getLine() + " COLUMNA: " + T.getColumn());
-            else
-            System.out.println("Error con: " + T.getType() + " LINEA: " + T.getLine() + " COLUMNA: " + T.getColumn());
+            try{
+                Token T = (Token) s.value;
+                if(T.getValue() != null)
+                m.Error("Error con: " + T.getValue() + " LINEA: " + T.getLine());
+                else
+                m.Error("Error con: " + ParserSym.terminalNames[T.getType()] + " LINEA: " + T.getLine());
+            }catch(Exception e){
+                
+                m.Error("Error con: " + s.value + " LINEA: " + s.left);
+                
+            }
         } 
         
         @Override
@@ -125,7 +131,7 @@ escribir        ::= ESCRIBIR PAREN_O mensaje:n1 PAREN_C    {:RESULT = n1;:}
                 ;
 
 
-operacion       ::= a:n1  {:RESULT = n1;:}
+operacion       ::= a:n1  {:RESULT = Operador.Convertir(n1);:}
                 ;
 
 a               ::= a:n1 ADD b:n2   {:RESULT = Operador.Op(n1,n2,1); :}

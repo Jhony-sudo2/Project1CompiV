@@ -466,16 +466,16 @@ public class Lexer implements java_cup.runtime.Scanner {
   private int zzFinalHighSurrogate = 0;
 
   /* user code: */
-    /*	
+    /*
     private Symbol token(int type,String Value){
         return new Symbol(type, new Token(Value,yyline+1,yycolumn+1,type));
-    }
-    */
+    }*/
+
     private Symbol token(int Type){
         return new Symbol(Type,new Token(yyline+1,yycolumn+1,Type));
     }
-    private Symbol token(int type, Object objeto) {
-        return new Symbol(type, yyline+1, yycolumn+1, objeto);
+    private Symbol token(int type, Object value) {
+        return new Symbol(type, yyline+1, yycolumn+1, value);
     }
     
 
@@ -876,7 +876,7 @@ public class Lexer implements java_cup.runtime.Scanner {
             // fall through
           case 31: break;
           case 3: 
-            { return token(INT, Integer.valueOf(yytext()));
+            { return token(INT,new Integer(yytext()));
             } 
             // fall through
           case 32: break;
@@ -961,12 +961,12 @@ public class Lexer implements java_cup.runtime.Scanner {
             // fall through
           case 48: break;
           case 20: 
-            { return token(FLOAT, Double.valueOf(yytext()));
+            { return token(FLOAT,new Double(yytext()));
             } 
             // fall through
           case 49: break;
           case 21: 
-            { return token(STRING,yytext());
+            { return token(STRING,new String(yytext()));
             } 
             // fall through
           case 50: break;

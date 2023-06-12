@@ -126,10 +126,10 @@ public class Manejador {
         return switch (tipo) {
             case 1 -> x>y;
             case 2 -> x<y;
-            case 3 -> x==y;
+            case 3 -> x.equals(y);
             case 4 -> x>=y;
             case 5 -> x<=y;
-            case 6 -> x!=y;
+            case 6 -> !x.equals(y);
             default -> false;
         };
     }

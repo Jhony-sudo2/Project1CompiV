@@ -18,7 +18,6 @@ public class Operador {
         boolean y2 = Manejador.isInt(y);
         
         if((x1|x2)&(y1|y2)){
-            System.out.println("NUMEROS VALIDOS: " + tipo);
             Double Number;
             switch(tipo){
                 case 1:
@@ -37,6 +36,16 @@ public class Operador {
             Resultado = Number + "";
             return Resultado;
         }else return x+y;
+    }
+    
+    public static String Convertir(String Numero){
+        try {
+            Double numerp = Double.parseDouble(Numero);
+            int numero = numerp.intValue();
+            return numero + "";
+        } catch (NumberFormatException e) {
+            return Numero;
+        }
     }
     
 }
