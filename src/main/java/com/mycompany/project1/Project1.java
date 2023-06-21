@@ -5,6 +5,7 @@
 package com.mycompany.project1;
 
 import com.mycompany.project1.ui.Main;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,8 +16,11 @@ public class Project1 {
     public static void main(String[] args) {
         Main n = new Main();
         n.setVisible(true);
-        String P = "x"+2;
-        System.out.println(n);
         
+        ArrayList<String> nuevo = new ArrayList<String>();
+        nuevo.add("hola");
     }
+    
+    
+    
 }

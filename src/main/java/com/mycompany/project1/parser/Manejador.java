@@ -6,6 +6,9 @@ package com.mycompany.project1.parser;
 
 import com.mycompany.project1.tablasimbolos.Tabla;
 import com.mycompany.project1.tablasimbolos.Variable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JOptionPane;
 /**
  *
@@ -99,9 +102,11 @@ public class Manejador {
     }
     
     public void Leer(String Variable){
-       java.util.Scanner n = new java.util.Scanner(System.in);
-       String Valor = JOptionPane.showInputDialog("Variable:" + Variable);
-       Actualizar(Variable,Valor);
+        if(!VerificarExistencia(Variable)){
+            java.util.Scanner n = new java.util.Scanner(System.in);
+            String Valor = JOptionPane.showInputDialog("Variable:" + Variable);
+            Actualizar(Variable,Valor);
+        }else Error("La variable: " + Variable  + " no existe");
     }
     
     
@@ -112,11 +117,42 @@ public class Manejador {
         else if(Opcion == 1)Leer(T);
         else if(Opcion == 3){
             String Valor = op.getValor();
-            
-            System.out.println("OPERANDO VARIABLE: " + T +"  VALOR: " + Valor);
             Actualizar(T,Valor);
        }
          
+    }
+    
+    // 1 INT    //2 DOUBLE  // 3 STRING
+    
+    public void Switch(ArrayList<Operacion> Lista,String Tipo,Operacion defaul){
+        int TipoPrincipal = getTipoDato(Tipo);
+        if(TipoPrincipal != 4){
+            Set<String> conjunto = new HashSet<>();
+            boolean error = false;
+            for (int i = 0; i < Lista.size(); i++) {
+                Operacion operacion = Lista.get(i);
+                int tipotmp = getTipoDato(operacion.getValor());
+                if(tipotmp == TipoPrincipal){
+                    if(conjunto.add(operacion.getValor())){
+                        System.out.println("COMPARANDO " + Tipo + " con " + operacion.getValor());
+                        if(Tipo.equals(operacion.getValor())){
+                            Operacion(operacion.getOperacion());
+                            error = true;
+                            break;
+                        }
+                    }else {
+                        Error("Datos duplicados en switch");
+                        error = true; 
+                        break;
+                    }
+                }else{
+                    Error("Los datos del caso no coinciden en el switch: ");
+                    error= true;
+                    break;
+                } 
+            }
+            if(!error) if(defaul != null) Operacion(defaul);
+        }
     }
     
     public void Escribir(String Mensaje){
@@ -181,9 +217,24 @@ public class Manejador {
         }
     }
     
+    public int getTipoDato(String V){
+        int tipo=-1;
+        if(isInt(V)) return 1;
+        else if(isDouble(V)) return 2;
+        else if(isString(V)){
+            if(VerificarExistencia(V)) return 3;
+            else {
+                Variable tmp = tabla.Buscar(V);
+                if(tmp!= null) return tmp.getTipo();
+            } 
+            
+        }
+        return 4;
+    }  
+    
+    
     public String getMensaje(){
-        if(Errores.isEmpty())
-        return this.Salida;
+        if(Errores.isEmpty())return Salida;
         else return Errores;
     }
     

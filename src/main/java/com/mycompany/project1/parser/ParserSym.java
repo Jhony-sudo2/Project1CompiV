@@ -11,17 +11,20 @@ public class ParserSym {
   public static final int MENOS = 11;
   public static final int MENOR = 18;
   public static final int CADENA = 3;
-  public static final int INT = 25;
+  public static final int INT = 31;
   public static final int IGUAL = 13;
   public static final int DECIMAL = 4;
   public static final int LEER = 14;
+  public static final int DEFECTO = 30;
   public static final int PAREN_O = 7;
-  public static final int ID = 28;
+  public static final int SWITCH = 25;
+  public static final int ID = 34;
   public static final int PARA = 20;
   public static final int MENORIG = 23;
-  public static final int STRING = 27;
+  public static final int STRING = 33;
+  public static final int CASO = 27;
   public static final int COMA = 21;
-  public static final int FLOAT = 26;
+  public static final int FLOAT = 32;
   public static final int MAYOR = 17;
   public static final int EOF = 0;
   public static final int MULT = 12;
@@ -34,9 +37,12 @@ public class ParserSym {
   public static final int SI = 5;
   public static final int ESCRIBIR = 15;
   public static final int error = 1;
+  public static final int LLAVE_C = 29;
+  public static final int LLAVE_A = 28;
   public static final int ENTERO = 2;
   public static final int PCOMA = 9;
   public static final int MIENTRAS = 16;
+  public static final int DPUNTOS = 26;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -63,6 +69,12 @@ public class ParserSym {
   "MAYORIG",
   "MENORIG",
   "DIFERENTE",
+  "SWITCH",
+  "DPUNTOS",
+  "CASO",
+  "LLAVE_A",
+  "LLAVE_C",
+  "DEFECTO",
   "INT",
   "FLOAT",
   "STRING",

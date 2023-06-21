@@ -12,6 +12,7 @@ public class Operacion {
     private int Tipo;
     private String Mensaje;
     private String Valor;
+    private Operacion Op;
     
     public Operacion(int Tipo, String Mensaje) {
         this.Tipo = Tipo;
@@ -22,6 +23,11 @@ public class Operacion {
         this.Tipo = Tipo;
         this.Mensaje = Variable;
         this.Valor = Valor;
+    }
+    
+    public Operacion(Operacion p,String Caso){
+        this.Op = p;
+        this.Valor = Caso;
     }
 
     public int getTipo() {
@@ -36,6 +42,9 @@ public class Operacion {
         return Mensaje;
     }
     
+    public Operacion getOperacion(){
+        return Op;
+    }
     
     
 }

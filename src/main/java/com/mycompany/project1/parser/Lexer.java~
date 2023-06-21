@@ -466,16 +466,18 @@ public class Lexer implements java_cup.runtime.Scanner {
   private int zzFinalHighSurrogate = 0;
 
   /* user code: */
-    /*
-    private Symbol token(int type,String Value){
-        return new Symbol(type, new Token(Value,yyline+1,yycolumn+1,type));
-    }*/
+    String Errores = "";
+    
 
     private Symbol token(int Type){
         return new Symbol(Type,new Token(yyline+1,yycolumn+1,Type));
     }
     private Symbol token(int type, Object value) {
         return new Symbol(type, yyline+1, yycolumn+1, value);
+    }
+
+    public String getErrores(){
+        return Errores;
     }
     
 
@@ -866,7 +868,7 @@ public class Lexer implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { System.out.println("Error con : " + yytext());
+            { Errores +=  "\n" + "Simbolo no reconocido: " + yytext() + " linea: " + (yyline+1);
             } 
             // fall through
           case 30: break;

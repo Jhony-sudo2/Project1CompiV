@@ -40,6 +40,9 @@ public class Operador {
     
     public static String Convertir(String Numero){
         try {
+            if(Numero == null) {
+                return " ";
+            }
             Double numerp = Double.parseDouble(Numero);
             int numero = numerp.intValue();
             return numero + "";

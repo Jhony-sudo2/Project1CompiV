@@ -1,12 +1,14 @@
 package com.mycompany.project1.parser;
 import com.mycompany.project1.tablasimbolos.Tabla;
 import com.mycompany.project1.operaciones.Operador;
+import java.util.ArrayList;
 class Parser;
 
 parser code {:
         private Tabla tabla = new Tabla();
         private Manejador m = new Manejador(tabla);
-
+        private ArrayList<Operacion> Operaciones = new ArrayList<Operacion>();
+        
 	public Parser(Lexer lexer){
 		super(lexer);
 	}
@@ -49,7 +51,7 @@ parser code {:
 //TERMINALES
 terminal Token ENTERO,CADENA,DECIMAL,SI,SINO,PAREN_O,PAREN_C,PCOMA,ADD,MENOS,
 MULT,IGUAL,LEER,ESCRIBIR,MIENTRAS,MAYOR,MENOR,IGUALC,PARA,COMA,MAYORIG,MENORIG,
-DIFERENTE;
+DIFERENTE,SWITCH,DPUNTOS,CASO,LLAVE_A,LLAVE_C,DEFECTO;
 terminal Integer INT;
 terminal Double FLOAT;
 terminal String STRING,ID;
@@ -57,13 +59,13 @@ terminal String STRING,ID;
 
 
 //NO TERMINALES
-non terminal mientras,bucle,pr2;
+non terminal mientras,bucle,pr2,switch,caso,caso2;
 
 non terminal Integer op,tipo,para,condicion,si;
 
-non terminal Operacion production,pr,Initial,asignacion;
+non terminal Operacion production,pr,Initial,asignacion,casos,defecto;
 
-non terminal String mensaje,escribir,leer,operacion,a,b,c;
+non terminal String mensaje,escribir,leer,operacion,a,b,c,switchCondicion;
 
 start with Initial;
 
@@ -89,8 +91,9 @@ production      ::= asignacion:n1          {:RESULT = n1;:}
                 ;
 
 bucle           ::= si                                 {::}
-                |   mientras pr:n1                     {::}
+                |   mientras                           {::}
                 |   para:n1 pr:n2                      {:for(int i=0;i<n1;i++){m.Operacion(n2);}:}
+                |   switch                             {::}
                 ;
 
 tipo            ::= ENTERO:n1  {:RESULT = 1;:}
@@ -121,7 +124,27 @@ op              ::= MAYOR                       {:RESULT = 1;:}
 para            ::= PARA PAREN_O  INT:n1 COMA INT:n2  PAREN_C {:RESULT = Math.abs(n1-n2);System.out.println("i: " + RESULT);:}
                 ;
 
-mientras        ::= MIENTRAS condicion  {::}
+mientras        ::= MIENTRAS condicion:n1 LLAVE_A Initial LLAVE_C  {:m.Mientras(Operaciones);:}
+                ;
+
+switch          ::= SWITCH switchCondicion:n1 LLAVE_A casos:n2     {:m.Switch(Operaciones,n1,n2); Operaciones = new ArrayList<Operacion>();:}
+                ;
+
+switchCondicion ::= PAREN_O mensaje:n1 PAREN_C                     {:RESULT = n1;:} 
+                ;
+
+casos           ::= caso2 defecto:n1                       {:RESULT = n1;:}
+                ;
+
+caso2           ::= caso caso2                          {::}
+                |   caso                                {::}
+                ;
+
+caso            ::= CASO mensaje:n2 DPUNTOS pr:n1                     {:Operaciones.add(new Operacion(n1,n2));:}
+                ;
+
+defecto         ::= DEFECTO DPUNTOS pr:n1  LLAVE_C                        {:RESULT =n1;:}
+                |   LLAVE_C     
                 ;
 
 leer            ::= LEER PAREN_O ID:n1 PAREN_C    {:RESULT = n1;:}

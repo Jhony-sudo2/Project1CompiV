@@ -52,6 +52,9 @@ String		= "\"" [^*] ~"\""
 (SI)		{return token(SI);}
 (SINO)		{return token(SINO);}
 (Para)		{return token(PARA);}
+(switch)        {return token(SWITCH);}
+(caso)          {return token(CASO);}
+(defecto)       {return token(DEFECTO);}
 {Id}		{return token(ID,new String(yytext()));}
 {Integer}	{return token(INT,new Integer(yytext()));}
 {Decimal}	{return token(FLOAT,new Double(yytext()));}
@@ -59,7 +62,10 @@ String		= "\"" [^*] ~"\""
 {String}        {return token(STRING,new String(yytext()));}
 
 ")"		{return token(PAREN_C);}
+"{"             {return token(LLAVE_A);}
+"}"             {return token(LLAVE_C);}
 ";"             {return token(PCOMA);}
+":"             {return token(DPUNTOS);}
 ","             {return token(COMA);}
 "("		{return token(PAREN_O);}
 "+"		{return token(ADD);}

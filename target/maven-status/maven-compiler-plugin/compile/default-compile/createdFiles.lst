@@ -1,5 +1,6 @@
 com/mycompany/project1/ui/Main$1.class
 com/mycompany/project1/ui/Leer$1.class
+com/mycompany/project1/operaciones/Para.class
 com/mycompany/project1/ui/Leer.class
 com/mycompany/project1/ui/Main$2.class
 com/mycompany/project1/parser/ParserSym.class
@@ -12,5 +13,8 @@ com/mycompany/project1/parser/Parser.class
 com/mycompany/project1/parser/Operacion.class
 com/mycompany/project1/ui/Main.class
 com/mycompany/project1/operaciones/Operador.class
+com/mycompany/project1/operaciones/TipoOperacion.class
+com/mycompany/project1/operaciones/Operacion.class
+com/mycompany/project1/operaciones/Mientras.class
 com/mycompany/project1/tablasimbolos/Variable.class
 com/mycompany/project1/tablasimbolos/Tabla.class
