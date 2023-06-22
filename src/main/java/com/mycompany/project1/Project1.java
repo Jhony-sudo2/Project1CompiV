@@ -16,9 +16,8 @@ public class Project1 {
     public static void main(String[] args) {
         Main n = new Main();
         n.setVisible(true);
+        int x =5;
         
-        ArrayList<String> nuevo = new ArrayList<String>();
-        nuevo.add("hola");
     }
     
     

@@ -4,12 +4,15 @@
  */
 package com.mycompany.project1.ui;
 
+import com.mycompany.project1.operaciones.Operacion;
 import com.mycompany.project1.parser.Lexer;
+import com.mycompany.project1.parser.Manejador;
 import com.mycompany.project1.parser.Parser;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -126,14 +129,20 @@ public class Main extends javax.swing.JFrame {
         Reader reader = new StringReader(Entrada.getText());
         Lexer lexer = new Lexer(reader); 
         parser = new Parser(lexer);
+        ArrayList<Operacion> Lista;
+        Manejador m = new Manejador();
         try{
-            parser.parse();
+            Lista = (ArrayList<Operacion>) parser.parse().value;
+            m.EjecutarSalidas(Lista);
             parser.getM().Error(lexer.getErrores());
             Salida.setText("");
-            Salida.setText(parser.getSalida());
+            Salida.setText(m.getMensaje() + parser.getSalida());
           
         }catch(Exception e){
-            e.printStackTrace();
+            parser.getM().Error(lexer.getErrores());
+            Salida.setText("");
+            Salida.setText(m.getMensaje() + parser.getSalida());
+          
         }
     }//GEN-LAST:event_CompileActionPerformed
     

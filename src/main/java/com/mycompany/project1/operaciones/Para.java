@@ -24,10 +24,12 @@ public class Para extends Operacion{
     public void Ejecutar(){
         for (int i = 0; i < I; i++) {
             for (Operacion Operacione : Operaciones) {
-                if(Operacione.getTipo() == TipoOperacion.FUNCION){
-                    System.out.println("ES FUNCION HACER ALGO MAS");
-                }
                 Operacione.Ejecutar();
+                if(Operacione.getTipo() == TipoOperacion.ESCRIBIR){
+                    Salida(Operacione.getSalida());
+                }else{
+                    if(!Operacione.getSalida().isEmpty())Salida(Operacione.getSalida());
+                }
             }
         }
     }

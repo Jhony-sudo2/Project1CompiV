@@ -1,0 +1,53 @@
+package com.mycompany.project1.parser;
+import com.mycompany.project1.tablasimbolos.Tabla;
+import com.mycompany.project1.operaciones.Operador;
+class Parser;
+
+parser code {:
+        private Tabla tabla;
+        private Manejador m = new Manejador(tabla);
+        
+	public Parser(Lexer2 lexer,Tabla tabla){
+		super(lexer);
+		this.tabla = tabla;
+	}   
+        
+:}
+
+
+//TERMINALES
+terminal ADD,MENOS,MULT;
+terminal Integer INT;
+terminal Double FLOAT;
+terminal String STRING,ID;
+
+
+
+//NO TERMINALES
+non terminal String operacion,a,b,c,String;
+
+start with Initial;
+
+
+/****GRAMATICA*****/
+
+Initial         ::= operacion	                 {::}
+                ;
+
+operacion       ::= a:n1  {:RESULT = Operador.Convertir(n1);:}
+                ;
+
+a               ::= a:n1 ADD b:n2   {:RESULT = Operador.Op(n1,n2,1); :}
+                |   a:n1 MENOS b:n2 {:RESULT = Operador.Op(n1,n2,2); :}
+                |   b:n1            {:RESULT = n1;:} 
+                ;
+
+b               ::= b:n1 MULT c:n2   {:RESULT = Operador.Op(n1,n2,3);:}
+                |   c:n1             {:RESULT = n1;:}
+                ;
+
+c               ::= INT:n1             {:RESULT = String.valueOf(n1);:}
+                |   FLOAT:n1           {:RESULT = String.valueOf(n1);:}
+                |   ID:n1              {:if(!m.VerificarExistencia(n1)) RESULT = tabla.Buscar(n1).getValor();
+                                         else m.Error("La variable: " + n1 + " no existe");:}
+                ;

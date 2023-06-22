@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.JOptionPane;
+import com.mycompany.project1.operaciones.Operacion;
+import com.mycompany.project1.operaciones.TipoOperacion;
+import com.mycompany.project1.operaciones.Salida;
 /**
  *
  * @author jhony
@@ -22,6 +25,21 @@ public class Manejador {
     
     public Manejador(Tabla tabla) {
         this.tabla = tabla;
+    }
+    
+    public Manejador(){
+    
+    }
+    
+    public void EjecutarSalidas(ArrayList<Operacion> T){
+        String Errores = "";
+        for (Operacion operacion : T) {
+            operacion.Ejecutar();
+            if(!operacion.getSalida().isEmpty()) Salida += operacion.getSalida();
+            if(!operacion.getErrores().isEmpty()) Errores += operacion.getErrores();
+            
+        }
+    
     }
     
     public boolean TIpo(String Var1,String Var2){
@@ -110,7 +128,7 @@ public class Manejador {
     }
     
     
-    public void Operacion(Operacion op){
+    public void Operacion(Operacion2 op){
         String T = op.getMensaje();
         int Opcion = op.getTipo();
         if(Opcion == 2) Escribir(T);
@@ -124,13 +142,13 @@ public class Manejador {
     
     // 1 INT    //2 DOUBLE  // 3 STRING
     
-    public void Switch(ArrayList<Operacion> Lista,String Tipo,Operacion defaul){
+    public void Switch(ArrayList<Operacion2> Lista,String Tipo,Operacion2 defaul){
         int TipoPrincipal = getTipoDato(Tipo);
         if(TipoPrincipal != 4){
             Set<String> conjunto = new HashSet<>();
             boolean error = false;
             for (int i = 0; i < Lista.size(); i++) {
-                Operacion operacion = Lista.get(i);
+                Operacion2 operacion = Lista.get(i);
                 int tipotmp = getTipoDato(operacion.getValor());
                 if(tipotmp == TipoPrincipal){
                     if(conjunto.add(operacion.getValor())){

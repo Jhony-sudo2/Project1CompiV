@@ -1,15 +1,17 @@
 package com.mycompany.project1.parser;
 import com.mycompany.project1.tablasimbolos.Tabla;
-import com.mycompany.project1.operaciones.Operador;
+import com.mycompany.project1.operaciones.*;
 import java.util.ArrayList;
 class Parser;
 
 parser code {:
         private Tabla tabla = new Tabla();
         private Manejador m = new Manejador(tabla);
-        private ArrayList<Operacion> Operaciones = new ArrayList<Operacion>();
         
-	public Parser(Lexer lexer){
+        private ArrayList<Casos> Casos = new ArrayList<Casos>();
+        private int Condicion = 0;
+
+        public Parser(Lexer lexer){
 		super(lexer);
 	}
         
@@ -44,6 +46,19 @@ parser code {:
         @Override
         public void unrecovered_syntax_error(java_cup.runtime.Symbol s) throws java.lang.Exception{
         }   
+
+        public ArrayList<Operacion> Unir(Operacion x,ArrayList<Operacion> y){
+            ArrayList<Operacion>Resultado = new ArrayList<>();
+            Resultado.add(x);
+            Resultado.addAll(y);
+            return Resultado;
+        }
+
+        public ArrayList<Operacion> Retornar(Operacion x){
+            ArrayList<Operacion>Resultado = new ArrayList<>();
+            Resultado.add(x);
+            return Resultado;
+        }
         
 :}
 
@@ -59,41 +74,40 @@ terminal String STRING,ID;
 
 
 //NO TERMINALES
-non terminal mientras,bucle,pr2,switch,caso,caso2;
+non terminal caso,caso2;
 
-non terminal Integer op,tipo,para,condicion,si;
+non terminal Integer op,tipo,para;
 
-non terminal Operacion production,pr,Initial,asignacion,casos,defecto;
+non terminal Condicion condicion;
 
-non terminal String mensaje,escribir,leer,operacion,a,b,c,switchCondicion;
+non terminal Operacion production,pr,asignacion,casos,defecto,mientras,switch,si,bucle,escribir,leer;
 
+non terminal String mensaje,operacion,a,b,c,switchCondicion;
+non terminal ArrayList<Operacion> Initial;
 start with Initial;
 
 
 /****GRAMATICA*****/
 
-Initial         ::= pr2 Initial                  {::}
-                |   bucle Initial                {::}
-                |   bucle                        {::}
-                |   pr2                          {::}
+Initial         ::= pr:n1 Initial:n2                  {:RESULT = Unir(n1,n2);:}
+                |   pr:n1                             {:RESULT = Retornar(n1);:}
                 ;
 
 
 pr              ::= production:n1 PCOMA            {:RESULT = n1;:}
+                |   bucle:n1                       {:RESULT = n1;:}
                 ;
 
-pr2             ::= production:n1 PCOMA          {:m.Operacion(n1);:}
-                ;
 
 production      ::= asignacion:n1          {:RESULT = n1;:}
-                |   leer:n1                {:RESULT = new Operacion(1,n1);:}
-                |   escribir:n1            {:RESULT = new Operacion(2,n1);:}
+                |   leer:n1                {:RESULT = n1;:}
+                |   escribir:n1            {:RESULT = n1;:}
                 ;
 
-bucle           ::= si                                 {::}
-                |   mientras                           {::}
-                |   para:n1 pr:n2                      {:for(int i=0;i<n1;i++){m.Operacion(n2);}:}
-                |   switch                             {::}
+bucle           ::= si:n1                                   {:RESULT = n1; Condicion = 0;:}
+                |   mientras:n1                             {:RESULT = n1;:}
+                |   para:n1 LLAVE_A Initial:n2 LLAVE_C      {:RESULT = new Para(tabla,n2,n1);:}
+                |   switch:n1                               {:RESULT = n1;:}
                 ;
 
 tipo            ::= ENTERO:n1  {:RESULT = 1;:}
@@ -101,16 +115,16 @@ tipo            ::= ENTERO:n1  {:RESULT = 1;:}
                 |   DECIMAL:n1 {:RESULT = 2;:}
                 ;
 
-asignacion      ::= tipo:n2 ID:n1 IGUAL mensaje:n3   {:m.Asignacion(n1,n3,n2);RESULT = new Operacion(4," c"," ");:}
-                |   tipo:n2 ID:n1                    {:m.Asignacion(n1,null,n2);RESULT = new Operacion(4," "," ");:}
-                |   ID:n1 IGUAL mensaje:n2           {:RESULT = new Operacion(3,n1,n2);:}
+asignacion      ::= tipo:n2 ID:n1 IGUAL mensaje:n3   {:RESULT = new OVariable(tabla,n2,n1,n3,1);:}
+                |   tipo:n2 ID:n1                    {:RESULT = new OVariable(tabla,n2,n1,"",1);:}
+                |   ID:n1 IGUAL mensaje:n2           {:RESULT = new OVariable(tabla,1,n1,n2,2);:}
                 ;
 
-si              ::= SI condicion:n1 pr:n2   {:if(n1==1)m.Operacion(n2); RESULT = n1;:}
-                |   si:n1 SINO pr:n2        {:if(n1==2) m.Operacion(n2);:}
+si              ::= SI condicion:n1 LLAVE_A Initial:n2 LLAVE_C   {:RESULT = new Si(tabla,n1,n2,null);:}
+                |   si:n1 SINO LLAVE_A Initial:n2 LLAVE_C        {:RESULT = new Si(tabla,(Si)n1,null,n2);:}
                 ;
 
-condicion       ::= PAREN_O mensaje:n1 op:n3 mensaje:n2 PAREN_C         {:RESULT = m.Condicion(n1,n2,n3);:} 
+condicion       ::= PAREN_O mensaje:n1 op:n3 mensaje:n2 PAREN_C         {:RESULT = new Condicion(n1,n2,n3);:} 
                 ;
 
 op              ::= MAYOR                       {:RESULT = 1;:}
@@ -124,10 +138,10 @@ op              ::= MAYOR                       {:RESULT = 1;:}
 para            ::= PARA PAREN_O  INT:n1 COMA INT:n2  PAREN_C {:RESULT = Math.abs(n1-n2);System.out.println("i: " + RESULT);:}
                 ;
 
-mientras        ::= MIENTRAS condicion:n1 LLAVE_A Initial LLAVE_C  {:m.Mientras(Operaciones);:}
+mientras        ::= MIENTRAS condicion:n1 LLAVE_A Initial:n2 LLAVE_C  {:RESULT = new Mientras(n2,n1,tabla);:}
                 ;
 
-switch          ::= SWITCH switchCondicion:n1 LLAVE_A casos:n2     {:m.Switch(Operaciones,n1,n2); Operaciones = new ArrayList<Operacion>();:}
+switch          ::= SWITCH switchCondicion:n1 LLAVE_A casos:n2     {:RESULT = new Switch(tabla,n1,n2,Casos); Casos = new ArrayList<Casos>();:}
                 ;
 
 switchCondicion ::= PAREN_O mensaje:n1 PAREN_C                     {:RESULT = n1;:} 
@@ -140,38 +154,37 @@ caso2           ::= caso caso2                          {::}
                 |   caso                                {::}
                 ;
 
-caso            ::= CASO mensaje:n2 DPUNTOS pr:n1                     {:Operaciones.add(new Operacion(n1,n2));:}
-                ;
+caso            ::= CASO mensaje:n2 DPUNTOS pr:n1                     {:Casos.add(new Casos(n2,n1));:}
+                 ;
 
 defecto         ::= DEFECTO DPUNTOS pr:n1  LLAVE_C                        {:RESULT =n1;:}
                 |   LLAVE_C     
                 ;
 
-leer            ::= LEER PAREN_O ID:n1 PAREN_C    {:RESULT = n1;:}
+leer            ::= LEER PAREN_O ID:n1 PAREN_C    {:RESULT = new Salida(tabla,n1,2);:}
                 ;
 
 mensaje         ::= operacion:n1        {:RESULT =  n1;:}
-                |   STRING:n1           {:RESULT =  n1.substring(1,n1.length()-1);:}
+                |   STRING:n1           {:RESULT =  n1;:}
                 ;
                 
-escribir        ::= ESCRIBIR PAREN_O mensaje:n1 PAREN_C    {:RESULT = n1;:}
+escribir        ::= ESCRIBIR PAREN_O mensaje:n1 PAREN_C    {:RESULT = new Salida(tabla,n1,1);:}
                 ;
 
 
-operacion       ::= a:n1  {:RESULT = Operador.Convertir(n1);:}
+operacion       ::= a:n1  {:RESULT = n1;:}
                 ;
 
-a               ::= a:n1 ADD b:n2   {:RESULT = Operador.Op(n1,n2,1); :}
-                |   a:n1 MENOS b:n2 {:RESULT = Operador.Op(n1,n2,2); :}
+a               ::= a:n1 ADD b:n2   {:RESULT = n1 + "+"+n2; :}
+                |   a:n1 MENOS b:n2 {:RESULT = n1 + "-"+n2; :}
                 |   b:n1            {:RESULT = n1;:} 
                 ;
 
-b               ::= b:n1 MULT c:n2   {:RESULT = Operador.Op(n1,n2,3);:}
+b               ::= b:n1 MULT c:n2   {:RESULT = n1 + "*" + n2;:}
                 |   c:n1             {:RESULT = n1;:}
                 ;
 
 c               ::= INT:n1             {:RESULT = String.valueOf(n1);:}
                 |   FLOAT:n1           {:RESULT = String.valueOf(n1);:}
-                |   ID:n1              {:if(!m.VerificarExistencia(n1)) RESULT = tabla.Buscar(n1).getValor();
-                                         else m.Error("La variable: " + n1 + " no existe");:}
+                |   ID:n1              {:RESULT = n1;:}
                 ;

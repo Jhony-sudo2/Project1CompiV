@@ -10,5 +10,5 @@ package com.mycompany.project1.operaciones;
  */
 public enum TipoOperacion {
     MIENTRAS,PARA,SI,ESCRIBIR,SINO,LEER,DECLARAR,ACTUALIZAR,SWITCH
-    ,FUNCION,VARIABLE;
+    ,FUNCION,VARIABLE,SALIDA;
 }

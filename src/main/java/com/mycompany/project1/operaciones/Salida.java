@@ -1,0 +1,70 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.project1.operaciones;
+
+import com.mycompany.project1.parser.operaciones.Lexer2;
+import com.mycompany.project1.parser.operaciones.Parser2;
+import com.mycompany.project1.tablasimbolos.Tabla;
+import com.mycompany.project1.tablasimbolos.Variable;
+import java.io.Reader;
+import java.io.StringReader;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author jhony
+ */
+public class Salida extends Operacion{
+    private String Mensaje;
+    private String MensajeOriginal;
+    private int tipo = 0;
+    public Salida(Tabla tabla,String Mensaje,int Tipo) {
+        super(TipoOperacion.SALIDA, tabla);
+        this.Mensaje = Mensaje;
+        this.MensajeOriginal = Mensaje;
+        this.tipo = Tipo;
+        if(tipo == 1) this.setTipo(TipoOperacion.ESCRIBIR);
+    }
+    
+    @Override
+    public void Ejecutar(){
+        if(tipo == 1){
+            Escribir();
+        }
+        else Leer();
+    }
+    
+    public String  Escribir(){
+        Reader reader = new StringReader(MensajeOriginal);
+        Lexer2 lexer = new Lexer2(reader);
+        Parser2 parser = new Parser2(lexer,getTabla());
+        try{
+            Mensaje = (String) parser.parse().value;
+        }catch(Exception e){
+                e.printStackTrace();
+        }
+        Variable tmp = getTabla().Buscar(Mensaje);
+        System.out.println("ESCRIBIENDO: " + Mensaje);
+        if(tmp == null){
+            Salida(Mensaje);
+            return Mensaje;
+        } else{
+            Salida(tmp.getValor());
+            return tmp.getValor();
+        }
+    }
+    
+    public void Leer(){
+        if(!Existe(Mensaje)){
+            java.util.Scanner n = new java.util.Scanner(System.in);
+            String Valor = JOptionPane.showInputDialog("Variable:" + Mensaje);
+            OVariable tmp = new OVariable(getTabla(),2,Mensaje,Valor,2);
+            tmp.Actualizar();
+        }else Error("La variable: " + Mensaje  + " no existe");
+    }
+    
+    
+    
+}

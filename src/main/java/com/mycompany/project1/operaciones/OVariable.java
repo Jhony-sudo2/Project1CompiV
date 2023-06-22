@@ -6,8 +6,12 @@ package com.mycompany.project1.operaciones;
 
 import static com.mycompany.project1.parser.Manejador.isDouble;
 import static com.mycompany.project1.parser.Manejador.isInt;
+import com.mycompany.project1.parser.operaciones.Lexer2;
+import com.mycompany.project1.parser.operaciones.Parser2;
 import com.mycompany.project1.tablasimbolos.Tabla;
 import com.mycompany.project1.tablasimbolos.Variable;
+import java.io.Reader;
+import java.io.StringReader;
 
 /**
  *
@@ -17,16 +21,32 @@ public class OVariable extends Operacion{
     private String NombreVar;
     private int Tipo;
     private String Valor;
-    
-    public OVariable(Tabla tabla,int Tipo,String Valor){
+    private int TipoOp;
+    private String ValorA;
+    public OVariable(Tabla tabla,int Tipo,String NombreVar,String Valor,int TipoOp){
         super(TipoOperacion.VARIABLE,tabla);
         this.Tipo = Tipo;
         this.Valor = Valor;
+        this.NombreVar = NombreVar;
+        this.TipoOp = TipoOp;
     }
     
     @Override
     public void Ejecutar(){
-        switch(Tipo){
+        Reader reader = new StringReader(Valor);
+        Lexer2 lexer = new Lexer2(reader);
+        Parser2 parser = new Parser2(lexer,getTabla());
+        System.out.println("ANALIZANDO: " + Valor);
+        if(Valor.isEmpty()) ValorA=Valor;
+        else{
+            try{
+                ValorA = (String) parser.parse().value;
+                System.out.println("VALORA: " + ValorA);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        switch(TipoOp){
             case 1 -> CrearVariable();
             case 2 -> Actualizar();
         }
@@ -34,13 +54,13 @@ public class OVariable extends Operacion{
     
     public void CrearVariable(){
         if(Existe(NombreVar)){
-            if(Valor == null){
-                this.getTabla().Add(NombreVar, Tipo);
+            if(ValorA == null | ValorA.isEmpty()){
+                getTabla().Add(NombreVar, Tipo);
                 System.out.println("VARIABLE: " + NombreVar +" creada tipo: " + Tipo);
             }
-            else if(Comparar(Tipo,Valor)){
-                this.getTabla().Add(NombreVar, Tipo, Valor);
-                System.out.println("VARIABLE: " + NombreVar + " creada con valor: " + Valor);
+            else if(Comparar(Tipo,ValorA)){
+                getTabla().Add(NombreVar, Tipo, ValorA);
+                System.out.println("VARIABLE: " + NombreVar + " creada con valor: " + ValorA);
             }else{
                 Error("El tipo de dato no es compatible con la variable: " + NombreVar);
             }
@@ -49,12 +69,13 @@ public class OVariable extends Operacion{
     
     
     public void Actualizar(){
+        if(ValorA == null)ValorA = Valor;
         if(!Existe(NombreVar)){
             Variable tmp = getTabla().Buscar(NombreVar);
             int TipoV = tmp.getTipo();
-            if(Comparar(TipoV,Valor)){
-                getTabla().Actualizar(Valor, NombreVar);
-                System.out.println("VARIABLE: " + NombreVar + " actualizada a: " + Valor);
+            if(Comparar(TipoV,ValorA)){
+                getTabla().Actualizar(ValorA, NombreVar);
+                System.out.println("VARIABLE: " + NombreVar + " actualizada a: " + ValorA);
             }else{
                 Error("El tipo de dato no es compatible con la variable: " + NombreVar);
             }

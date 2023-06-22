@@ -4,6 +4,7 @@
  */
 package com.mycompany.project1.operaciones;
 
+import com.mycompany.project1.parser.Manejador;
 import com.mycompany.project1.tablasimbolos.Tabla;
 import java.util.ArrayList;
 
@@ -12,27 +13,61 @@ import java.util.ArrayList;
  * @author jhony
  */
 public class Si extends Operacion{
-    private int Condicion;
+    private int Tipo = 0;
+    private int ValorCondicion = 0;
+    private Condicion condicion;
     private ArrayList<Operacion> Operaciones;
     private ArrayList<Operacion> Operaciones2;
-    public Si(Tabla tabla,int Condicion,ArrayList<Operacion> Operaciones,ArrayList<Operacion> Operaciones2){
+    private Si SI;
+    public Si(Tabla tabla,Condicion condicion,ArrayList<Operacion> Operaciones,ArrayList<Operacion> Operaciones2){
         super(TipoOperacion.SI,tabla);
-        this.Condicion = Condicion;
+        this.condicion = condicion;
         this.Operaciones = Operaciones;
         this.Operaciones2 = Operaciones2;
+        Tipo = 1;
     }
+    
+    public Si(Tabla tabla,Si Condicion,ArrayList<Operacion> Operaciones,ArrayList<Operacion> Operaciones2){
+        super(TipoOperacion.SI,tabla);
+        this.SI = Condicion;
+        this.Operaciones = Operaciones;
+        this.Operaciones2 = Operaciones2;
+        Tipo = 2;
+    }
+    
     
     @Override
     public void Ejecutar(){
+        Manejador m = new Manejador(getTabla());
         System.out.println("EJECUTANDO OPERACION SI");
-        if(Condicion == 1){
+        if(Tipo == 1)
+            ValorCondicion = m.Condicion(condicion.getValor1(), condicion.getValor2(), condicion.getOperacion());
+        else{
+            Operaciones = SI.Operaciones;
+            Condicion tmp = SI.getCondicion();
+            ValorCondicion =m.Condicion(tmp.getValor1(), tmp.getValor2(), tmp.getOperacion());
+        }
+        System.out.println("VALOR CONDICION: " + ValorCondicion);
+        if(ValorCondicion == 1){
             for (Operacion Operacione : Operaciones) {
                 Operacione.Ejecutar();
+                if(Operacione.getTipo() == TipoOperacion.ESCRIBIR){
+                    Salida(Operacione.getSalida());
+                }
             }
-        }else if(Operaciones2 != null){
-            for (Operacion operacion : Operaciones2) {
-                operacion.Ejecutar();
+        }else{
+            for (Operacion Operacione : Operaciones2) {
+                Operacione.Ejecutar();
+                if(Operacione.getTipo() == TipoOperacion.ESCRIBIR){
+                    Salida(Operacione.getSalida());
+                }
             }
         }
+        
+        
+    }
+    
+    public Condicion getCondicion(){
+        return condicion;
     }
 }

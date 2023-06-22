@@ -11,7 +11,7 @@ import com.mycompany.project1.tablasimbolos.Tabla;
  * @author jhony
  */
 public abstract class Operacion {
-    private final TipoOperacion Tipo;
+    private  TipoOperacion Tipo;
     private Tabla tabla;
     private String Errores = "";
     private String Salida = "";
@@ -45,7 +45,9 @@ public abstract class Operacion {
         Errores+=Error;
     }
     public void Salida(String salida){
-        Salida += salida + "\n";
+        if(Tipo == TipoOperacion.ESCRIBIR | Tipo == TipoOperacion.SALIDA)
+        Salida = salida + "\n";
+        else Salida += salida;
     }
     
     public String getErrores(){
@@ -55,5 +57,11 @@ public abstract class Operacion {
     public String getSalida(){
         return Salida;
     }
+
+    public void setTipo(TipoOperacion Tipo) {
+        this.Tipo = Tipo;
+    }
+    
+    
     
 }
