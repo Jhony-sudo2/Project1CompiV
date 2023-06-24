@@ -7,6 +7,7 @@
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/parser/operaciones/Lexer2.java
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/parser/Lexer.java
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/operaciones/Si.java
+/home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/tablasimbolos/TablaFuncion.java
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/parser/ParserSym.java
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/operaciones/OVariable.java
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/parser/Manejador.java
@@ -20,8 +21,8 @@
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/operaciones/Salida.java
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/operaciones/Operador.java
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/operaciones/TipoOperacion.java
-/home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/operaciones/Funcion.java
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/tablasimbolos/Variable.java
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/parser/Token.java
+/home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/operaciones/OFuncion.java
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/operaciones/Mientras.java
 /home/jhony/ING/QUINTO/COMPI 1/VAQUERAS/Projects/Project1/src/main/java/com/mycompany/project1/operaciones/Operacion.java

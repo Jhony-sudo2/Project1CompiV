@@ -45,6 +45,7 @@ public class OFuncion extends Operacion{
         this.TipoOperador = 2;
         this.Parametros2 = Parametros2;
         this.Nombre = Nombre;
+        this.Tabla = tabla;
     }
     
     
@@ -52,26 +53,24 @@ public class OFuncion extends Operacion{
     @Override
     
     public void Ejecutar(){
-        System.out.println("EJECUTANDO UNA FUNCION");
-        if(Tipo == 1) GuardarFuncion();
+        if(TipoOperador == 1) GuardarFuncion();
         else EjecutarFuncion();
     }
     
     public void GuardarFuncion(){
         System.out.println("GUARDANDO FUNCION");
-        if(Tabla.BuscarF(Nombre) != null){
+        if(Tabla.BuscarF(Nombre) == null){
             Tabla.Add(Nombre, Retorno, Operaciones, ValorRetorno, Parametros);
-        }else Error("La funcion ya existe");
+        }else Error("La funcion: "  + Nombre + " ya existe");
     }
     
     public void EjecutarFuncion(){
-        System.out.println("Ejecutando funcion");
         if(Tabla.BuscarF(Nombre) != null){
             Funcion tmp = Tabla.BuscarF(Nombre);
             EjecutarFunciones(tmp.getOperaciones());
             ObtenerRetorno();
             
-        }else Error("La funcion no existe");
+        }else Error("La funcion: " + Nombre + " no existe");
         
     }
     
@@ -80,15 +79,17 @@ public class OFuncion extends Operacion{
     }
     
     public void ObtenerRetorno(){
-        Reader reader = new StringReader(ValorRetorno);
-        Lexer2 lexer = new Lexer2(reader);
-        Parser2 parser = new Parser2(lexer,getTabla());
-        System.out.println("ANALIZANDO: " + ValorRetorno);
-        try{
-            ValorRetorno = (String) parser.parse().value;
-            System.out.println("VALORA: " + ValorRetorno);
-        }catch(Exception e){
-                e.printStackTrace();
+        if(ValorRetorno != null){
+            Reader reader = new StringReader(ValorRetorno);
+            Lexer2 lexer = new Lexer2(reader);
+            Parser2 parser = new Parser2(lexer,getTabla());
+            System.out.println("ANALIZANDO: " + ValorRetorno);
+            try{
+                ValorRetorno = (String) parser.parse().value;
+                System.out.println("VALORA: " + ValorRetorno);
+            }catch(Exception e){
+                    e.printStackTrace();
+            }
         }
         
     }

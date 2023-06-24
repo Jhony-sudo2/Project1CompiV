@@ -32,11 +32,13 @@ public class Manejador {
     }
     
     public void EjecutarSalidas(ArrayList<Operacion> T){
-        String Errores = "";
         for (Operacion operacion : T) {
             operacion.Ejecutar();
             if(!operacion.getSalida().isEmpty()) Salida += operacion.getSalida();
-            if(!operacion.getErrores().isEmpty()) Errores += operacion.getErrores();
+            if(!operacion.getErrores().isEmpty()) {
+                Errores += operacion.getErrores();
+                break;
+            }
             
         }
     

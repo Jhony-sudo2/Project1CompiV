@@ -103,7 +103,7 @@ non terminal Operacion production,pr,asignacion,casos,defecto,mientras,switch,si
 non terminal String mensaje,operacion,a,b,c,switchCondicion,retorno;
 non terminal ArrayList<Operacion> Initial;
 non terminal ArrayList<Variable>  parametros,parametros2;
-non terminal ArrayList<String>    parametrosllamada;
+non terminal ArrayList<String>    parametrosllamada,pllamada;
 start with Initial;
 
 
@@ -212,11 +212,15 @@ parametros2     ::= parametros:n1 PAREN_C  {:RESULT = n1;:}
                 |   PAREN_C                {::}
                 ;
 
-parametros      ::= tipo:n1 ID:n2 parametros:n3       {:RESULT = UnirP(new Variable(n2,n1),n3);:}
+parametros      ::= tipo:n1 ID:n2 COMA  parametros:n3       {:RESULT = UnirP(new Variable(n2,n1),n3);:}
                 |   tipo:n1 ID:n2                     {:RESULT = RetornarP(new Variable(n2,n1));:}
                 ;
 
-llamadaf        ::= ID:n1 PAREN_O parametrosllamada:n2 PAREN_C    {:RESULT = new OFuncion(funciones,n1,n2);:}
+llamadaf        ::= ID:n1 PAREN_O pllamada:n2     {:RESULT = new OFuncion(funciones,n1,n2);:}
+                ;
+
+pllamada        ::= parametrosllamada:n1 PAREN_C     {:RESULT = n1;:}
+                |   PAREN_C
                 ;
 
 parametrosllamada ::= mensaje:n1 COMA parametrosllamada:n2     {:n2.add(0,n1); RESULT = n2;:}
