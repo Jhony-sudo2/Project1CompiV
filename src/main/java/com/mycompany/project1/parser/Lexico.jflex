@@ -44,6 +44,9 @@ String		= "\"" [^*] ~"\""
 /*Actions*/
 %%
 (Entero)	{return token(ENTERO);}
+(funcion)       {return token(FUNCION);}
+(void)          {return token(VOID);}
+(retornar)      {return token(RETORNAR);}
 (Leer)          {return token(LEER);}
 (Escribir)	{return token(ESCRIBIR);}
 (Mientras)	{return token(MIENTRAS);}

@@ -5,6 +5,7 @@
 package com.mycompany.project1.operaciones;
 
 import com.mycompany.project1.tablasimbolos.Tabla;
+import java.util.ArrayList;
 
 /**
  *
@@ -23,6 +24,14 @@ public abstract class Operacion {
     
     public void Ejecutar(){
         
+    }
+    
+    public void EjecutarFunciones(ArrayList<Operacion> Operaciones){
+        for (Operacion Operacione : Operaciones) {
+            Operacione.Ejecutar();
+            if(Operacione.getTipo() == TipoOperacion.ESCRIBIR)
+                Salida(Operacione.getSalida());
+        }
     }
     
     public TipoOperacion getTipo(){

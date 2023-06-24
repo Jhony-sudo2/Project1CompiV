@@ -1,11 +1,15 @@
 package com.mycompany.project1.parser;
 import com.mycompany.project1.tablasimbolos.Tabla;
 import com.mycompany.project1.operaciones.*;
+import com.mycompany.project1.tablasimbolos.TablaFuncion;
+import com.mycompany.project1.tablasimbolos.Variable;
 import java.util.ArrayList;
+import java.util.Arrays;
 class Parser;
 
 parser code {:
         private Tabla tabla = new Tabla();
+        private TablaFuncion funciones = new TablaFuncion();
         private Manejador m = new Manejador(tabla);
         
         private ArrayList<Casos> Casos = new ArrayList<Casos>();
@@ -60,13 +64,27 @@ parser code {:
             return Resultado;
         }
         
+        public ArrayList<Variable> UnirP(Variable x,ArrayList<Variable> y){
+            ArrayList<Variable>Resultado = new ArrayList<>();
+            Resultado.add(x);
+            Resultado.addAll(y);
+            return Resultado;
+        }
+
+        public ArrayList<Variable> RetornarP(Variable x){
+            ArrayList<Variable>Resultado = new ArrayList<>();
+            Resultado.add(x);
+            return Resultado;
+        }
+        
+        
 :}
 
 
 //TERMINALES
 terminal Token ENTERO,CADENA,DECIMAL,SI,SINO,PAREN_O,PAREN_C,PCOMA,ADD,MENOS,
 MULT,IGUAL,LEER,ESCRIBIR,MIENTRAS,MAYOR,MENOR,IGUALC,PARA,COMA,MAYORIG,MENORIG,
-DIFERENTE,SWITCH,DPUNTOS,CASO,LLAVE_A,LLAVE_C,DEFECTO;
+DIFERENTE,SWITCH,DPUNTOS,CASO,LLAVE_A,LLAVE_C,DEFECTO,FUNCION,VOID,RETORNAR;
 terminal Integer INT;
 terminal Double FLOAT;
 terminal String STRING,ID;
@@ -76,14 +94,16 @@ terminal String STRING,ID;
 //NO TERMINALES
 non terminal caso,caso2;
 
-non terminal Integer op,tipo,para;
+non terminal Integer op,tipo,para,tiporetorno;
 
 non terminal Condicion condicion;
 
-non terminal Operacion production,pr,asignacion,casos,defecto,mientras,switch,si,bucle,escribir,leer;
+non terminal Operacion production,pr,asignacion,casos,defecto,mientras,switch,si,bucle,escribir,leer,funcion,llamadaf;
 
-non terminal String mensaje,operacion,a,b,c,switchCondicion;
+non terminal String mensaje,operacion,a,b,c,switchCondicion,retorno;
 non terminal ArrayList<Operacion> Initial;
+non terminal ArrayList<Variable>  parametros,parametros2;
+non terminal ArrayList<String>    parametrosllamada;
 start with Initial;
 
 
@@ -102,12 +122,14 @@ pr              ::= production:n1 PCOMA            {:RESULT = n1;:}
 production      ::= asignacion:n1          {:RESULT = n1;:}
                 |   leer:n1                {:RESULT = n1;:}
                 |   escribir:n1            {:RESULT = n1;:}
+                |   llamadaf:n1            {:RESULT = n1;:}
                 ;
 
 bucle           ::= si:n1                                   {:RESULT = n1; Condicion = 0;:}
                 |   mientras:n1                             {:RESULT = n1;:}
                 |   para:n1 LLAVE_A Initial:n2 LLAVE_C      {:RESULT = new Para(tabla,n2,n1);:}
                 |   switch:n1                               {:RESULT = n1;:}
+                |   funcion:n1                              {:RESULT = n1;:}             
                 ;
 
 tipo            ::= ENTERO:n1  {:RESULT = 1;:}
@@ -118,6 +140,8 @@ tipo            ::= ENTERO:n1  {:RESULT = 1;:}
 asignacion      ::= tipo:n2 ID:n1 IGUAL mensaje:n3   {:RESULT = new OVariable(tabla,n2,n1,n3,1);:}
                 |   tipo:n2 ID:n1                    {:RESULT = new OVariable(tabla,n2,n1,"",1);:}
                 |   ID:n1 IGUAL mensaje:n2           {:RESULT = new OVariable(tabla,1,n1,n2,2);:}
+                |   tipo:n2 ID:n1 IGUAL llamadaf:n3  {:RESULT = new OVariable(tabla,n2,n1,(OFuncion)n3,1);:}
+                |   ID:n1 IGUAL llamadaf:n2          {:RESULT = new OVariable(tabla,1,n1,(OFuncion)n2,2);:}
                 ;
 
 si              ::= SI condicion:n1 LLAVE_A Initial:n2 LLAVE_C   {:RESULT = new Si(tabla,n1,n2,null);:}
@@ -171,6 +195,33 @@ mensaje         ::= operacion:n1        {:RESULT =  n1;:}
 escribir        ::= ESCRIBIR PAREN_O mensaje:n1 PAREN_C    {:RESULT = new Salida(tabla,n1,1);:}
                 ;
 
+funcion         ::= FUNCION tiporetorno:n2 ID:n1  PAREN_O parametros2:n5 LLAVE_A Initial:n3 retorno:n4  {:RESULT = new OFuncion(funciones,n1,n2,n3,n4,n5);:}
+                ;
+
+tiporetorno     ::= VOID    {:RESULT = 0;:}
+                |   ENTERO  {:RESULT = 1;:}
+                |   CADENA  {:RESULT = 2;:}
+                |   DECIMAL {:RESULT = 3;:}
+                ;
+
+retorno         ::= RETORNAR mensaje:n1 PCOMA LLAVE_C   {:RESULT = n1;:}
+                |   LLAVE_C                             {::}
+                ;
+
+parametros2     ::= parametros:n1 PAREN_C  {:RESULT = n1;:}
+                |   PAREN_C                {::}
+                ;
+
+parametros      ::= tipo:n1 ID:n2 parametros:n3       {:RESULT = UnirP(new Variable(n2,n1),n3);:}
+                |   tipo:n1 ID:n2                     {:RESULT = RetornarP(new Variable(n2,n1));:}
+                ;
+
+llamadaf        ::= ID:n1 PAREN_O parametrosllamada:n2 PAREN_C    {:RESULT = new OFuncion(funciones,n1,n2);:}
+                ;
+
+parametrosllamada ::= mensaje:n1 COMA parametrosllamada:n2     {:n2.add(0,n1); RESULT = n2;:}
+                  |   mensaje:n1                               {:RESULT = new ArrayList<String>(Arrays.asList(n1));:}  
+                  ;
 
 operacion       ::= a:n1  {:RESULT = n1;:}
                 ;

@@ -23,6 +23,8 @@ public class OVariable extends Operacion{
     private String Valor;
     private int TipoOp;
     private String ValorA;
+    private OFuncion funcion;
+    
     public OVariable(Tabla tabla,int Tipo,String NombreVar,String Valor,int TipoOp){
         super(TipoOperacion.VARIABLE,tabla);
         this.Tipo = Tipo;
@@ -30,22 +32,19 @@ public class OVariable extends Operacion{
         this.NombreVar = NombreVar;
         this.TipoOp = TipoOp;
     }
+    public OVariable(Tabla tabla,int Tipo,String NombreVar,OFuncion Valor,int TipoOp){
+        super(TipoOperacion.VARIABLE,tabla);
+        this.Tipo = Tipo;
+        this.funcion = Valor;
+        this.NombreVar = NombreVar;
+        this.TipoOp = TipoOp;
+    }
+    
     
     @Override
     public void Ejecutar(){
-        Reader reader = new StringReader(Valor);
-        Lexer2 lexer = new Lexer2(reader);
-        Parser2 parser = new Parser2(lexer,getTabla());
-        System.out.println("ANALIZANDO: " + Valor);
-        if(Valor.isEmpty()) ValorA=Valor;
-        else{
-            try{
-                ValorA = (String) parser.parse().value;
-                System.out.println("VALORA: " + ValorA);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
+        if(funcion == null)Valor();
+        else ValorFuncion();
         switch(TipoOp){
             case 1 -> CrearVariable();
             case 2 -> Actualizar();
@@ -90,6 +89,27 @@ public class OVariable extends Operacion{
             case 3 ->  true;
             default -> false;
         };
+    }
+    
+    public void Valor(){
+        Reader reader = new StringReader(Valor);
+        Lexer2 lexer = new Lexer2(reader);
+        Parser2 parser = new Parser2(lexer,getTabla());
+        System.out.println("ANALIZANDO: " + Valor);
+        if(Valor.isEmpty()) ValorA=Valor;
+        else{
+            try{
+                ValorA = (String) parser.parse().value;
+                System.out.println("VALORA: " + ValorA);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public void ValorFuncion(){
+        funcion.Ejecutar();
+        ValorA = funcion.getRetorno();
     }
     
     

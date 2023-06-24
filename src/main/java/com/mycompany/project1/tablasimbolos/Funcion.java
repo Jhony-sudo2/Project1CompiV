@@ -4,32 +4,49 @@
  */
 package com.mycompany.project1.tablasimbolos;
 
+import com.mycompany.project1.operaciones.Operacion;
+import java.util.ArrayList;
+
 /**
  *
  * @author jhony
  */
 public class Funcion {
     private final String Nombre;
-    private final String Retorno;
-    private final int[] Parametros;
+    private final String ValorRetorno;
+    private final ArrayList<Variable> Parametros;
+    private final int Retorno;
+    private final ArrayList<Operacion> Operaciones;
 
-    public Funcion(String Nombre, String Retorno, int[] Parametros) {
+    public Funcion(String Nombre,String ValorRetorno, ArrayList<Variable> Parametros, int Retorno, ArrayList<Operacion> Operaciones) {
         this.Nombre = Nombre;
-        this.Retorno = Retorno;
+        this.ValorRetorno  = ValorRetorno;
         this.Parametros = Parametros;
+        this.Retorno = Retorno;
+        this.Operaciones = Operaciones;
     }
 
     public String getNombre() {
         return Nombre;
     }
 
-    public String getRetorno() {
+    public String getValorRetorno() {
+        return ValorRetorno;
+    }
+
+    public ArrayList<Variable> getParametros() {
+        return Parametros;
+    }
+
+    public int getRetorno() {
         return Retorno;
     }
 
-    public int[] getParametros() {
-        return Parametros;
+    public ArrayList<Operacion> getOperaciones() {
+        return Operaciones;
     }
+    
+    
     
     
     

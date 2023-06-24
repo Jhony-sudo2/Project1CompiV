@@ -23,14 +23,7 @@ public class Para extends Operacion{
     @Override
     public void Ejecutar(){
         for (int i = 0; i < I; i++) {
-            for (Operacion Operacione : Operaciones) {
-                Operacione.Ejecutar();
-                if(Operacione.getTipo() == TipoOperacion.ESCRIBIR){
-                    Salida(Operacione.getSalida());
-                }else{
-                    if(!Operacione.getSalida().isEmpty())Salida(Operacione.getSalida());
-                }
-            }
+            EjecutarFunciones(Operaciones);
         }
     }
     

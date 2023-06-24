@@ -8,10 +8,10 @@ com/mycompany/project1/parser/Lexer.class
 com/mycompany/project1/parser/Manejador.class
 com/mycompany/project1/parser/Parser$CUP$Parser$actions.class
 com/mycompany/project1/operaciones/Condicion.class
+com/mycompany/project1/operaciones/OFuncion.class
 com/mycompany/project1/Project1.class
 com/mycompany/project1/operaciones/OVariable.class
 com/mycompany/project1/parser/operaciones/Lexer2.class
-com/mycompany/project1/operaciones/Funcion.class
 com/mycompany/project1/operaciones/Switch.class
 com/mycompany/project1/operaciones/Si.class
 com/mycompany/project1/operaciones/TipoOperacion.class
@@ -21,6 +21,7 @@ com/mycompany/project1/ui/Main$1.class
 com/mycompany/project1/operaciones/Para.class
 com/mycompany/project1/parser/operaciones/Parser2$CUP$Parser2$actions.class
 com/mycompany/project1/parser/ParserSym.class
+com/mycompany/project1/tablasimbolos/TablaFuncion.class
 com/mycompany/project1/parser/Token.class
 com/mycompany/project1/parser/operaciones/Parser2.class
 com/mycompany/project1/parser/Parser.class
