@@ -21,6 +21,10 @@ public class Tabla {
         Variables.add(new Variable(Nombre,Tipo));
     }
     
+    public void Add(Variable tmp){
+        Variables.add(tmp);
+    }
+    
     public Variable Buscar(String T){
         for (int i = 0; i < Variables.size(); i++) {
             Variable tmp = Variables.get(i);
@@ -34,6 +38,12 @@ public class Tabla {
         Variable tmp = Buscar(Var);
         tmp.setValor(Valor);
     }
+
+    public ArrayList<Variable> getVariables() {
+        return Variables;
+    }
+    
+    
     
     
 }

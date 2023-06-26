@@ -17,6 +17,7 @@ public class Funcion {
     private final ArrayList<Variable> Parametros;
     private final int Retorno;
     private final ArrayList<Operacion> Operaciones;
+    private Tabla TablaLocal = new Tabla();
 
     public Funcion(String Nombre,String ValorRetorno, ArrayList<Variable> Parametros, int Retorno, ArrayList<Operacion> Operaciones) {
         this.Nombre = Nombre;
@@ -28,6 +29,10 @@ public class Funcion {
 
     public String getNombre() {
         return Nombre;
+    }
+    
+    public Tabla getTablaLocal(){
+        return TablaLocal;
     }
 
     public String getValorRetorno() {
@@ -44,6 +49,12 @@ public class Funcion {
 
     public ArrayList<Operacion> getOperaciones() {
         return Operaciones;
+    }
+    public void IniciarTabla(){
+        TablaLocal = new Tabla();
+        for (Variable Parametro : Parametros) {
+            TablaLocal.Add(Parametro);
+        }
     }
     
     

@@ -20,6 +20,8 @@ public class Salida extends Operacion{
     private String Mensaje;
     private String MensajeOriginal;
     private int tipo = 0;
+    private OFuncion funcion;
+    
     public Salida(Tabla tabla,String Mensaje,int Tipo) {
         super(TipoOperacion.SALIDA, tabla);
         this.Mensaje = Mensaje;
@@ -27,11 +29,19 @@ public class Salida extends Operacion{
         this.tipo = Tipo;
         if(tipo == 1) this.setTipo(TipoOperacion.ESCRIBIR);
     }
+    public Salida(Tabla tabla,OFuncion funcion){
+        super(TipoOperacion.SALIDA,tabla);
+        this.funcion = funcion;
+        this.tipo = 1;
+    }
+    
     
     @Override
     public void Ejecutar(){
         if(tipo == 1){
+            if(funcion == null)
             Escribir();
+            else EscribirconFuncion();
         }
         else Leer();
     }
@@ -42,6 +52,9 @@ public class Salida extends Operacion{
         Parser2 parser = new Parser2(lexer,getTabla());
         try{
             Mensaje = (String) parser.parse().value;
+            if(!parser.getErrores().isEmpty()) {
+                    Error(parser.getErrores());
+            }
         }catch(Exception e){
                 e.printStackTrace();
         }
@@ -63,6 +76,13 @@ public class Salida extends Operacion{
             OVariable tmp = new OVariable(getTabla(),2,Mensaje,Valor,2);
             tmp.Actualizar();
         }else Error("La variable: " + Mensaje  + " no existe");
+    }
+    
+    public void EscribirconFuncion(){
+        funcion.Ejecutar();
+        if(!funcion.getErrores().isEmpty()) Error(funcion.getErrores());
+        if(!funcion.getSalida().isEmpty()) Salida(funcion.getSalida());
+        Salida(funcion.getRetorno());
     }
     
     

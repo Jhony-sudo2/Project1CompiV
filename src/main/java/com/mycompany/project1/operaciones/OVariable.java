@@ -45,9 +45,11 @@ public class OVariable extends Operacion{
     public void Ejecutar(){
         if(funcion == null)Valor();
         else ValorFuncion();
-        switch(TipoOp){
-            case 1 -> CrearVariable();
-            case 2 -> Actualizar();
+        if(this.getErrores().isEmpty()){
+            switch(TipoOp){
+                case 1 -> CrearVariable();
+                case 2 -> Actualizar();
+            }
         }
     }
     
@@ -95,12 +97,15 @@ public class OVariable extends Operacion{
         Reader reader = new StringReader(Valor);
         Lexer2 lexer = new Lexer2(reader);
         Parser2 parser = new Parser2(lexer,getTabla());
-        System.out.println("ANALIZANDO: " + Valor);
+        System.out.println("ANALIZANDO DESDE VARIABLE: " + Valor);
         if(Valor.isEmpty()) ValorA=Valor;
         else{
             try{
                 ValorA = (String) parser.parse().value;
                 System.out.println("VALORA: " + ValorA);
+                if(!parser.getErrores().isEmpty()) {
+                    Error(parser.getErrores());
+                }
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -109,6 +114,7 @@ public class OVariable extends Operacion{
     
     public void ValorFuncion(){
         funcion.Ejecutar();
+        System.out.println("RETORNO: " + funcion.getRetorno());
         ValorA = funcion.getRetorno();
     }
     

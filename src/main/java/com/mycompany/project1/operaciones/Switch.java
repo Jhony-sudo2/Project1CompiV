@@ -6,8 +6,12 @@ package com.mycompany.project1.operaciones;
 
 import static com.mycompany.project1.parser.Manejador.isDouble;
 import static com.mycompany.project1.parser.Manejador.isInt;
+import com.mycompany.project1.parser.operaciones.Lexer2;
+import com.mycompany.project1.parser.operaciones.Parser2;
 import com.mycompany.project1.tablasimbolos.Tabla;
 import com.mycompany.project1.tablasimbolos.Variable;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +33,7 @@ public class Switch extends Operacion{
     
     @Override
     public void Ejecutar(){
+        Valor();
         int TipoPrincipal = getTipoDato(Tipo);
         if(TipoPrincipal != 4){
             Set<String> conjunto = new HashSet<>();
@@ -40,7 +45,10 @@ public class Switch extends Operacion{
                     if(conjunto.add(operacion.getValor())){
                         System.out.println("COMPARANDO " + Tipo + " con " + operacion.getValor());
                         if(Tipo.equals(operacion.getValor())){
-                            operacion.getOperacion().Ejecutar();
+                            for (Operacion operacione : operacion.getOperaciones()) {
+                                operacione.setTabla(getTabla());
+                            }
+                            EjecutarFunciones(operacion.getOperaciones());
                             error = true;
                             break;
                         }
@@ -55,24 +63,31 @@ public class Switch extends Operacion{
                     break;
                 } 
             }
-            if(!error) if(Defecto != null) Defecto.Ejecutar();
+            if(!error) if(Defecto != null) {
+                Defecto.Ejecutar();
+                if(!Defecto.getErrores().isEmpty()) Error(Defecto.getErrores());
+                if(!Defecto.getSalida().isEmpty()) Salida(Defecto.getSalida());
+            }
         }
+    }
+    public void Valor(){
+        Reader reader = new StringReader(Tipo);
+        Lexer2 lexer = new Lexer2(reader);
+        Parser2 parser = new Parser2(lexer,getTabla());
+        System.out.println("ANALIZANDO DESDE VARIABLE: " + Tipo);
+        
+            try{
+                Tipo = (String) parser.parse().value;
+                System.out.println("VALORA: " + Tipo);
+                if(!parser.getErrores().isEmpty()) {
+                    Error(parser.getErrores());
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
     }
     
-    public int getTipoDato(String V){
-        int tipo=-1;
-        if(isInt(V)) return 1;
-        else if(isDouble(V)) return 2;
-        else{
-            if(Existe(V)) return 3;
-            else {
-                Variable tmp = getTabla().Buscar(V);
-                if(tmp!= null) return tmp.getTipo();
-            } 
-            
-        }
-        return 4;
-    }
+    
     
     
     

@@ -4,7 +4,10 @@
  */
 package com.mycompany.project1.operaciones;
 
+import static com.mycompany.project1.parser.Manejador.isDouble;
+import static com.mycompany.project1.parser.Manejador.isInt;
 import com.mycompany.project1.tablasimbolos.Tabla;
+import com.mycompany.project1.tablasimbolos.Variable;
 import java.util.ArrayList;
 
 /**
@@ -29,8 +32,11 @@ public abstract class Operacion {
     public void EjecutarFunciones(ArrayList<Operacion> Operaciones){
         for (Operacion Operacione : Operaciones) {
             Operacione.Ejecutar();
-            if(Operacione.getTipo() == TipoOperacion.ESCRIBIR)
-                Salida(Operacione.getSalida());
+            if(!Operacione.getSalida().isEmpty())Salida(Operacione.getSalida());
+            if(!Operacione.getErrores().isEmpty()){
+                Error(Operacione.getErrores());
+                break;
+            }
         }
     }
     
@@ -55,7 +61,7 @@ public abstract class Operacion {
     }
     public void Salida(String salida){
         if(Tipo == TipoOperacion.ESCRIBIR | Tipo == TipoOperacion.SALIDA)
-        Salida = salida + "\n";
+        Salida += salida + "\n";
         else Salida += salida;
     }
     
@@ -69,6 +75,21 @@ public abstract class Operacion {
 
     public void setTipo(TipoOperacion Tipo) {
         this.Tipo = Tipo;
+    }
+    
+    public int getTipoDato(String V){
+        int tipo=-1;
+        if(isInt(V)) return 1;
+        else if(isDouble(V)) return 2;
+        else{
+            if(Existe(V)) return 3;
+            else {
+                Variable tmp = tabla.Buscar(V);
+                if(tmp!= null) return tmp.getTipo();
+            } 
+            
+        }
+        return 4;
     }
     
     

@@ -114,11 +114,15 @@ public class Parser2 extends java_cup.runtime.lr_parser {
 
         private Tabla tabla;
         private Manejador m = new Manejador(tabla);
-        
+        private String Errores = "";
 	public Parser2(Lexer2 lexer,Tabla tabla){
 		super(lexer);
 		this.tabla = tabla;
 	}   
+        
+        public String getErrores(){
+            return Errores;
+        }
         
 
 
@@ -309,7 +313,7 @@ class CUP$Parser2$actions {
 		int n1right = ((java_cup.runtime.Symbol)CUP$Parser2$stack.peek()).right;
 		String n1 = (String)((java_cup.runtime.Symbol) CUP$Parser2$stack.peek()).value;
 		if(tabla.Buscar(n1) != null) RESULT = tabla.Buscar(n1).getValor();
-                                         else m.Error("La variable: " + n1 + " no existe");
+                                         else {Errores = "La variable: " + n1 + " no existe"; RESULT = "";}
               CUP$Parser2$result = parser.getSymbolFactory().newSymbol("c",3, ((java_cup.runtime.Symbol)CUP$Parser2$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser2$stack.peek()), RESULT);
             }
           return CUP$Parser2$result;

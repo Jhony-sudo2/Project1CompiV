@@ -178,7 +178,7 @@ caso2           ::= caso caso2                          {::}
                 |   caso                                {::}
                 ;
 
-caso            ::= CASO mensaje:n2 DPUNTOS pr:n1                     {:Casos.add(new Casos(n2,n1));:}
+caso            ::= CASO mensaje:n2 DPUNTOS Initial:n1                     {:Casos.add(new Casos(n2,n1));:}
                  ;
 
 defecto         ::= DEFECTO DPUNTOS pr:n1  LLAVE_C                        {:RESULT =n1;:}
@@ -193,9 +193,11 @@ mensaje         ::= operacion:n1        {:RESULT =  n1;:}
                 ;
                 
 escribir        ::= ESCRIBIR PAREN_O mensaje:n1 PAREN_C    {:RESULT = new Salida(tabla,n1,1);:}
+                |   ESCRIBIR PAREN_O llamadaf:n1 PAREN_C       {:RESULT = new Salida(tabla,(OFuncion)n1);:}
                 ;
 
 funcion         ::= FUNCION tiporetorno:n2 ID:n1  PAREN_O parametros2:n5 LLAVE_A Initial:n3 retorno:n4  {:RESULT = new OFuncion(funciones,n1,n2,n3,n4,n5);:}
+                |   FUNCION tiporetorno:n2 ID:n1  PAREN_O parametros2:n5 LLAVE_A retorno:n4             {:RESULT = new OFuncion(funciones,n1,n2,null,n4,n5);:}
                 ;
 
 tiporetorno     ::= VOID    {:RESULT = 0;:}
@@ -216,7 +218,7 @@ parametros      ::= tipo:n1 ID:n2 COMA  parametros:n3       {:RESULT = UnirP(new
                 |   tipo:n1 ID:n2                     {:RESULT = RetornarP(new Variable(n2,n1));:}
                 ;
 
-llamadaf        ::= ID:n1 PAREN_O pllamada:n2     {:RESULT = new OFuncion(funciones,n1,n2);:}
+llamadaf        ::= ID:n1 PAREN_O pllamada:n2     {:RESULT = new OFuncion(funciones,tabla,n1,n2);:}
                 ;
 
 pllamada        ::= parametrosllamada:n1 PAREN_C     {:RESULT = n1;:}

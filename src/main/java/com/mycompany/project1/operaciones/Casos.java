@@ -4,17 +4,26 @@
  */
 package com.mycompany.project1.operaciones;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author jhony
  */
 public class Casos {
     private final String Valor;
-    private final Operacion Operacion;
+    private  Operacion Operacion;
+    private  ArrayList<Operacion> Operaciones;
     
+    /*
     public Casos(String Valor,Operacion Operacion) {
         this.Valor = Valor;
         this.Operacion = Operacion;
+    }*/
+    
+    public Casos(String Valor, ArrayList<Operacion> Operaciones){
+        this.Valor = Valor;
+        this.Operaciones = Operaciones;
     }
 
     public String getValor() {
@@ -25,6 +34,9 @@ public class Casos {
         return Operacion;
     }
     
+    public ArrayList<Operacion> getOperaciones(){
+        return Operaciones;
+    }
     
     
     

@@ -49,19 +49,9 @@ public class Si extends Operacion{
         }
         System.out.println("VALOR CONDICION: " + ValorCondicion);
         if(ValorCondicion == 1){
-            for (Operacion Operacione : Operaciones) {
-                Operacione.Ejecutar();
-                if(Operacione.getTipo() == TipoOperacion.ESCRIBIR){
-                    Salida(Operacione.getSalida());
-                }
-            }
-        }else{
-            for (Operacion Operacione : Operaciones2) {
-                Operacione.Ejecutar();
-                if(Operacione.getTipo() == TipoOperacion.ESCRIBIR){
-                    Salida(Operacione.getSalida());
-                }
-            }
+            EjecutarFunciones(Operaciones);
+        }else if(Operaciones2 != null & ValorCondicion ==2){
+            EjecutarFunciones(Operaciones2);
         }
         
         
