@@ -8,6 +8,7 @@ package com.mycompany.project1.parser.operaciones;
 import com.mycompany.project1.tablasimbolos.Tabla;
 import com.mycompany.project1.operaciones.Operador;
 import com.mycompany.project1.parser.Manejador;
+import com.mycompany.project1.tablasimbolos.Variable;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 generated parser.
@@ -115,6 +116,7 @@ public class Parser2 extends java_cup.runtime.lr_parser {
 
         private Tabla tabla;
         private Manejador m = new Manejador(tabla);
+        private Variable tmp;
         private String Errores = "";
         
 	public Parser2(Lexer2 lexer,Tabla tabla){
@@ -124,6 +126,10 @@ public class Parser2 extends java_cup.runtime.lr_parser {
         
         public String getErrores(){
             return Errores;
+        }
+        
+        public Variable getVariable(){
+            return tmp;
         }
         
 
@@ -302,7 +308,7 @@ class CUP$Parser2$actions {
 		int n1left = ((java_cup.runtime.Symbol)CUP$Parser2$stack.peek()).left;
 		int n1right = ((java_cup.runtime.Symbol)CUP$Parser2$stack.peek()).right;
 		String n1 = (String)((java_cup.runtime.Symbol) CUP$Parser2$stack.peek()).value;
-		if(tabla.Buscar(n1) != null) RESULT = tabla.Buscar(n1).getValor();
+		if(tabla.Buscar(n1) != null) {RESULT = tabla.Buscar(n1).getValor(); tmp = tabla.Buscar(n1);}
                                          else  {Errores = "La variable: " + n1 + " no existe"; RESULT = "";}
               CUP$Parser2$result = parser.getSymbolFactory().newSymbol("c",3, ((java_cup.runtime.Symbol)CUP$Parser2$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser2$stack.peek()), RESULT);
             }

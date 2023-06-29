@@ -7,9 +7,6 @@ package com.mycompany.project1.parser;
 import com.mycompany.project1.tablasimbolos.Tabla;
 import com.mycompany.project1.tablasimbolos.Variable;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import javax.swing.JOptionPane;
 import com.mycompany.project1.operaciones.Operacion;
 /**
  *
@@ -36,55 +33,9 @@ public class Manejador {
             if(!operacion.getErrores().isEmpty()) {
                 Errores += operacion.getErrores();
                 break;
-            }
-            
+            }  
         }
-    
     }
-    
-    public boolean TIpo(String Var1,String Var2){
-        Variable tmp = tabla.Buscar(Var1);
-        Variable tmp2 = tabla.Buscar(Var2);
-        if(tmp != null & tmp2 !=null){
-            int Tipo1 = tmp.getTipo();
-            int Tipo2 = tmp2.getTipo();
-            if(Tipo1 == Tipo2)return true;
-            else return false;
-        }else return false;
-        
-    }
-    
-    public void Actualizar(String Nombre,String Valor){
-        if(!VerificarExistencia(Nombre)){
-            Variable tmp = tabla.Buscar(Nombre);
-            int TipoV = tmp.getTipo();
-            if(Comparar(TipoV,Valor)){
-                tabla.Actualizar(Valor, Nombre);
-                System.out.println("VARIABLE: " + Nombre + " actualizada a: " + Valor);
-            }else{
-                Error("El tipo de dato no es compatible con la variable: " + Nombre);
-            }
-        }else Error("La variable: " + Nombre + " no existe");
-        
-    }
-    
-    public void Asignacion(String Var,String Valor,int Tipo){
-        if(VerificarExistencia(Var)){
-            if(Valor == null){
-                tabla.Add(Var, Tipo);
-                System.out.println("VARIABLE: " + Var +" creada tipo: " + Tipo);
-            }
-            else if(Comparar(Tipo,Valor)){
-                tabla.Add(Var, Tipo, Valor);
-                System.out.println("VARIABLE: " + Var + " creada con valor: " + Valor);
-            }else{
-                Error("El tipo de dato no es compatible con la variable: " + Var);
-            }
-        }else Error("La variable: " + Var + " no existe");
-        
-    }
-   
-    
     public boolean VerificarExistencia(String Var1){
         return tabla.Buscar(Var1) == null;
     }
@@ -116,69 +67,6 @@ public class Manejador {
                 if(Comparador(valor1,y.getValor(),tipo)) return 1;
                 else return 2;
             }else return 0;
-        }
-    }
-    
-    public void Leer(String Variable){
-        if(!VerificarExistencia(Variable)){
-            java.util.Scanner n = new java.util.Scanner(System.in);
-            String Valor = JOptionPane.showInputDialog("Variable:" + Variable);
-            Actualizar(Variable,Valor);
-        }else Error("La variable: " + Variable  + " no existe");
-    }
-    
-    
-    public void Operacion(Operacion2 op){
-        String T = op.getMensaje();
-        int Opcion = op.getTipo();
-        if(Opcion == 2) Escribir(T);
-        else if(Opcion == 1)Leer(T);
-        else if(Opcion == 3){
-            String Valor = op.getValor();
-            Actualizar(T,Valor);
-       }
-         
-    }
-    
-    // 1 INT    //2 DOUBLE  // 3 STRING
-    
-    public void Switch(ArrayList<Operacion2> Lista,String Tipo,Operacion2 defaul){
-        int TipoPrincipal = getTipoDato(Tipo);
-        if(TipoPrincipal != 4){
-            Set<String> conjunto = new HashSet<>();
-            boolean error = false;
-            for (int i = 0; i < Lista.size(); i++) {
-                Operacion2 operacion = Lista.get(i);
-                int tipotmp = getTipoDato(operacion.getValor());
-                if(tipotmp == TipoPrincipal){
-                    if(conjunto.add(operacion.getValor())){
-                        System.out.println("COMPARANDO " + Tipo + " con " + operacion.getValor());
-                        if(Tipo.equals(operacion.getValor())){
-                            Operacion(operacion.getOperacion());
-                            error = true;
-                            break;
-                        }
-                    }else {
-                        Error("Datos duplicados en switch");
-                        error = true; 
-                        break;
-                    }
-                }else{
-                    Error("Los datos del caso no coinciden en el switch: ");
-                    error= true;
-                    break;
-                } 
-            }
-            if(!error) if(defaul != null) Operacion(defaul);
-        }
-    }
-    
-    public void Escribir(String Mensaje){
-        Variable tmp = tabla.Buscar(Mensaje);
-        if(tmp == null){
-            Salida += Mensaje + "\n";
-        } else{
-            Salida += tmp.getValor() + "\n"; 
         }
     }
     
@@ -249,8 +137,6 @@ public class Manejador {
         }
         return 4;
     }  
-    
-    
     public String getMensaje(){
         if(Errores.isEmpty())return Salida;
         else return Errores;

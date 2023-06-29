@@ -5,10 +5,12 @@ package com.mycompany.project1.parser.operaciones;
 import com.mycompany.project1.tablasimbolos.Tabla;
 import com.mycompany.project1.operaciones.Operador;
 import com.mycompany.project1.parser.Manejador;
+import com.mycompany.project1.tablasimbolos.Variable;
 class Parser2;
 
 parser code {:
         private Tabla tabla;
+        private Variable tmp;
         private Manejador m = new Manejador(tabla);
         private String Errores = "";
         
@@ -19,6 +21,10 @@ parser code {:
         
         public String getErrores(){
             return Errores;
+        }
+
+        public Variable getVariable(){
+            return tmp;
         }
         
 :}
@@ -60,7 +66,7 @@ b               ::= b:n1 MULT c:n2   {:RESULT = Operador.Op(n1,n2,3);:}
 
 c               ::= INT:n1             {:RESULT = String.valueOf(n1);:}
                 |   FLOAT:n1           {:RESULT = String.valueOf(n1);:}
-                |   ID:n1              {:if(!m.VerificarExistencia(n1)) RESULT = tabla.Buscar(n1).getValor();
-                                         else Errores = "La variable: " + n1 + " no existe";:}
+                |   ID:n1              {:if(tabla.Buscar(n1) != null) {RESULT = tabla.Buscar(n1).getValor(); tmp = tabla.Buscar(n1);}
+                                         else  {Errores = "La variable: " + n1 + " no existe"; RESULT = "";}:}
                 |   STRING:n1           {:RESULT =  n1.substring(1,n1.length()-1);:}
                 ;

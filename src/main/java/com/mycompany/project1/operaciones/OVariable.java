@@ -101,7 +101,13 @@ public class OVariable extends Operacion{
         if(Valor.isEmpty()) ValorA=Valor;
         else{
             try{
+                
                 ValorA = (String) parser.parse().value;
+                if(parser.getVariable() != null){
+                    Variable tmp = parser.getVariable();
+                    if(tmp.getTipo() != Tipo)
+                    Error("El tipo de dato no coincide con la variable: " + NombreVar);
+                }
                 
                 if(!parser.getErrores().isEmpty()) {
                     Error(parser.getErrores());

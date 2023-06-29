@@ -19,7 +19,7 @@ public abstract class Operacion {
     private Tabla tabla;
     private String Errores = "";
     private String Salida = "";
-    
+    private int Linea = 0;
     public Operacion(TipoOperacion Tipo,Tabla tabla){
         this.Tipo = Tipo;
         this.tabla = tabla;
@@ -102,6 +102,9 @@ public abstract class Operacion {
         }
     }
     
+    public int getLinea(){
+        return Linea;
+    }
     
     
 }
