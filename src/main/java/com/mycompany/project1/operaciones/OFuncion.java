@@ -56,12 +56,15 @@ public class OFuncion extends Operacion{
     
     public void GuardarFuncion(){
         if(Tabla.BuscarF(Nombre) == null){
-            System.out.println("GUARDANDO FUNCION: " + Nombre);
-            Tabla.Add(Nombre, Retorno, Operaciones, ValorRetorno, Parametros);
-            if(Parametros != null){
-                Funcion tmp =  Tabla.BuscarF(Nombre);
-                tmp.IniciarTabla();
-            }
+            if((Retorno != 0 & ValorRetorno != null) | (Retorno == 0 & ValorRetorno ==null)){
+                System.out.println("GUARDANDO FUNCION: " + Nombre);
+                Tabla.Add(Nombre, Retorno, Operaciones, ValorRetorno, Parametros);
+                if(Parametros != null){
+                    Funcion tmp =  Tabla.BuscarF(Nombre);
+                    tmp.IniciarTabla();
+                }
+            }else if(Retorno != 0 & ValorRetorno == null )Error("La funcion: " + Nombre + " tiene que retornar un valor");
+            else Error("La funcion: " + Nombre + " es de tipo void, no devuelve ningun valor");
         }else Error("La funcion: "  + Nombre + " ya existe");
     }
     
@@ -86,7 +89,6 @@ public class OFuncion extends Operacion{
                 }
                 ObtenerRetorno(tmp.getValorRetorno(),tmp.getTablaLocal());
                 tmp.IniciarTabla();
-                System.out.println("RETORNO: " + tmp.getValorRetorno());
             }else Error("Error de parametros con la funcion: " + Nombre);
             
         }else Error("La funcion: " + Nombre + " no existe");
@@ -97,12 +99,10 @@ public class OFuncion extends Operacion{
         Reader reader = new StringReader(Valor);
         Lexer2 lexer = new Lexer2(reader);
         Parser2 parser = new Parser2(lexer,getTabla());
-        System.out.println("ANALIZANDO DESDE VARIABLE: " + Valor);
         if(Valor.isEmpty()) return Valor;
         else{
             try{
                 ValorA = (String) parser.parse().value;
-                System.out.println("VALORA: " + ValorA);
                 if(!parser.getErrores().isEmpty()) {
                     Error(parser.getErrores());
                     return "";
@@ -124,12 +124,9 @@ public class OFuncion extends Operacion{
             Reader reader = new StringReader(V);
             Lexer2 lexer = new Lexer2(reader);
             Parser2 parser = new Parser2(lexer,t);
-            System.out.println("ANALIZANDO RETORNO: " + V);
             try{
                 ValorRetorno = (String) parser.parse().value;
-                System.out.println("VALORA: " + V);
                 if(!parser.getErrores().isEmpty()) {
-                    System.out.println("ERROR DE PARSEO: " + parser.getErrores());
                     Error(parser.getErrores());
                 }
             }catch(Exception e){
@@ -151,6 +148,11 @@ public class OFuncion extends Operacion{
         else return false;
         return true;
     }
+
+    public ArrayList<Operacion> getOperaciones() {
+        return Operaciones;
+    }
+    
     
     
 }

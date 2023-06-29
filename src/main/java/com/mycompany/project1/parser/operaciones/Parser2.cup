@@ -10,11 +10,16 @@ class Parser2;
 parser code {:
         private Tabla tabla;
         private Manejador m = new Manejador(tabla);
+        private String Errores = "";
         
 	public Parser2(Lexer2 lexer,Tabla tabla){
 		super(lexer);
 		this.tabla = tabla;
 	}   
+        
+        public String getErrores(){
+            return Errores;
+        }
         
 :}
 
@@ -35,11 +40,10 @@ start with Initial;
 
 /****GRAMATICA*****/
 
-Initial         ::= mensaje:n1	                 {:RESULT = n1;System.out.println("REGRESANDO: " + n1);:}
+Initial         ::= mensaje:n1	                 {:RESULT = n1;:}
                 ;
 
 mensaje         ::= operacion:n1        {:RESULT =  n1;:}
-                |   STRING:n1           {:RESULT =  n1.substring(1,n1.length()-1);:}
                 ;
 
 operacion       ::= a:n1  {:RESULT = Operador.Convertir(n1);:}
@@ -57,5 +61,6 @@ b               ::= b:n1 MULT c:n2   {:RESULT = Operador.Op(n1,n2,3);:}
 c               ::= INT:n1             {:RESULT = String.valueOf(n1);:}
                 |   FLOAT:n1           {:RESULT = String.valueOf(n1);:}
                 |   ID:n1              {:if(!m.VerificarExistencia(n1)) RESULT = tabla.Buscar(n1).getValor();
-                                         else m.Error("La variable: " + n1 + " no existe");:}
+                                         else Errores = "La variable: " + n1 + " no existe";:}
+                |   STRING:n1           {:RESULT =  n1.substring(1,n1.length()-1);:}
                 ;

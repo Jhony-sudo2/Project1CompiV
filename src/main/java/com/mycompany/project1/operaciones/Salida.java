@@ -59,7 +59,6 @@ public class Salida extends Operacion{
                 e.printStackTrace();
         }
         Variable tmp = getTabla().Buscar(Mensaje);
-        System.out.println("ESCRIBIENDO: " + Mensaje);
         if(tmp == null){
             Salida(Mensaje);
             return Mensaje;
@@ -79,10 +78,14 @@ public class Salida extends Operacion{
     }
     
     public void EscribirconFuncion(){
+        funcion.setSalida("");
         funcion.Ejecutar();
         if(!funcion.getErrores().isEmpty()) Error(funcion.getErrores());
-        if(!funcion.getSalida().isEmpty()) Salida(funcion.getSalida());
-        Salida(funcion.getRetorno());
+        if(!funcion.getSalida().isEmpty() & !funcion.getRetorno().isEmpty())
+        System.out.println("SALIDA: " + funcion.getSalida());
+        System.out.println("RETORNO: " + funcion.getRetorno());
+        setSalida("");
+        Salida(funcion.getSalida() + funcion.getRetorno());
     }
     
     

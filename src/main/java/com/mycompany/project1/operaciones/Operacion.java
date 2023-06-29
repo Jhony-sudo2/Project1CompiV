@@ -61,7 +61,7 @@ public abstract class Operacion {
     }
     public void Salida(String salida){
         if(Tipo == TipoOperacion.ESCRIBIR | Tipo == TipoOperacion.SALIDA)
-        Salida += salida + "\n";
+        Salida = salida + "\n";
         else Salida += salida;
     }
     
@@ -90,6 +90,16 @@ public abstract class Operacion {
             
         }
         return 4;
+    }
+    
+    public void setSalida(String t){
+        Salida = t;
+    }
+    
+    public void AsignarNuevaTabla(ArrayList<Operacion> Op,Tabla tmp){
+        for (Operacion operacion : Op) {
+            operacion.setTabla(tmp);
+        }
     }
     
     

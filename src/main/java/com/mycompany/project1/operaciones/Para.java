@@ -22,6 +22,7 @@ public class Para extends Operacion{
     
     @Override
     public void Ejecutar(){
+        setSalida("");
         for (int i = 0; i < I; i++) {
             EjecutarFunciones(Operaciones);
         }

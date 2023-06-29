@@ -11,8 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.swing.JOptionPane;
 import com.mycompany.project1.operaciones.Operacion;
-import com.mycompany.project1.operaciones.TipoOperacion;
-import com.mycompany.project1.operaciones.Salida;
 /**
  *
  * @author jhony

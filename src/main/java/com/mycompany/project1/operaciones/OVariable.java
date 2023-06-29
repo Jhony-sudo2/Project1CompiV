@@ -85,6 +85,7 @@ public class OVariable extends Operacion{
     
     
     public boolean Comparar(int Tipo,String Valor){
+        System.out.println("CAMPARANDO TIPO: " + Tipo + " con: " + Valor);
         return switch (Tipo) {
             case 1 -> isInt(Valor);
             case 2 -> isDouble(Valor);
@@ -97,12 +98,11 @@ public class OVariable extends Operacion{
         Reader reader = new StringReader(Valor);
         Lexer2 lexer = new Lexer2(reader);
         Parser2 parser = new Parser2(lexer,getTabla());
-        System.out.println("ANALIZANDO DESDE VARIABLE: " + Valor);
         if(Valor.isEmpty()) ValorA=Valor;
         else{
             try{
                 ValorA = (String) parser.parse().value;
-                System.out.println("VALORA: " + ValorA);
+                
                 if(!parser.getErrores().isEmpty()) {
                     Error(parser.getErrores());
                 }
@@ -114,7 +114,6 @@ public class OVariable extends Operacion{
     
     public void ValorFuncion(){
         funcion.Ejecutar();
-        System.out.println("RETORNO: " + funcion.getRetorno());
         ValorA = funcion.getRetorno();
     }
     

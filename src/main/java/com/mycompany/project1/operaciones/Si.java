@@ -49,8 +49,10 @@ public class Si extends Operacion{
         }
         System.out.println("VALOR CONDICION: " + ValorCondicion);
         if(ValorCondicion == 1){
+            AsignarNuevaTabla(Operaciones,getTabla());
             EjecutarFunciones(Operaciones);
         }else if(Operaciones2 != null & ValorCondicion ==2){
+            AsignarNuevaTabla(Operaciones2,getTabla());
             EjecutarFunciones(Operaciones2);
         }
         
