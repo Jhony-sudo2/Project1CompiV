@@ -20,9 +20,10 @@ public abstract class Operacion {
     private String Errores = "";
     private String Salida = "";
     private int Linea = 0;
-    public Operacion(TipoOperacion Tipo,Tabla tabla){
+    public Operacion(TipoOperacion Tipo,Tabla tabla,int Linea){
         this.Tipo = Tipo;
         this.tabla = tabla;
+        this.Linea = Linea;
     }
     
     public void Ejecutar(){
@@ -58,6 +59,7 @@ public abstract class Operacion {
     
     public void Error(String Error){
         Errores+=Error;
+        Errores += " Linea: " + Linea;
     }
     public void Salida(String salida){
         if(Tipo == TipoOperacion.ESCRIBIR | Tipo == TipoOperacion.SALIDA)

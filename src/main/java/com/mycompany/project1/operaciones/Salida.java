@@ -22,15 +22,15 @@ public class Salida extends Operacion{
     private int tipo = 0;
     private OFuncion funcion;
     
-    public Salida(Tabla tabla,String Mensaje,int Tipo) {
-        super(TipoOperacion.SALIDA, tabla);
+    public Salida(Tabla tabla,String Mensaje,int Tipo,int Linea) {
+        super(TipoOperacion.SALIDA, tabla,Linea);
         this.Mensaje = Mensaje;
         this.MensajeOriginal = Mensaje;
         this.tipo = Tipo;
         if(tipo == 1) this.setTipo(TipoOperacion.ESCRIBIR);
     }
-    public Salida(Tabla tabla,OFuncion funcion){
-        super(TipoOperacion.SALIDA,tabla);
+    public Salida(Tabla tabla,OFuncion funcion,int Linea){
+        super(TipoOperacion.SALIDA,tabla,Linea);
         this.funcion = funcion;
         this.tipo = 1;
     }
@@ -72,7 +72,7 @@ public class Salida extends Operacion{
         if(!Existe(Mensaje)){
             java.util.Scanner n = new java.util.Scanner(System.in);
             String Valor = JOptionPane.showInputDialog("Variable:" + Mensaje);
-            OVariable tmp = new OVariable(getTabla(),2,Mensaje,Valor,2);
+            OVariable tmp = new OVariable(getTabla(),2,Mensaje,Valor,2,getLinea());
             tmp.Actualizar();
         }else Error("La variable: " + Mensaje  + " no existe");
     }

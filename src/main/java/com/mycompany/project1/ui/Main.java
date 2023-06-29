@@ -126,24 +126,26 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CompileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CompileActionPerformed
-        Reader reader = new StringReader(Entrada.getText());
-        Lexer lexer = new Lexer(reader); 
-        parser = new Parser(lexer);
-        ArrayList<Operacion> Lista;
-        Manejador m = new Manejador();
-        try{
-            Lista = (ArrayList<Operacion>) parser.parse().value;
-            m.EjecutarSalidas(Lista);
-            parser.getM().Error(lexer.getErrores());
-            Salida.setText("");
-            Salida.setText(m.getMensaje() + parser.getSalida());
-          
-        }catch(Exception e){
-            parser.getM().Error(lexer.getErrores());
-            Salida.setText("");
-            Salida.setText(m.getMensaje() + parser.getSalida());
-          
-        }
+        if(!Entrada.getText().isEmpty()){
+            Reader reader = new StringReader(Entrada.getText());
+            Lexer lexer = new Lexer(reader); 
+            parser = new Parser(lexer);
+            ArrayList<Operacion> Lista;
+            Manejador m = new Manejador();
+            try{
+                Lista = (ArrayList<Operacion>) parser.parse().value;
+                m.EjecutarSalidas(Lista);
+                parser.getM().Error(lexer.getErrores());
+                Salida.setText("");
+                Salida.setText(m.getMensaje() + parser.getSalida());
+
+            }catch(Exception e){
+                parser.getM().Error(lexer.getErrores());
+                Salida.setText("");
+                Salida.setText(m.getMensaje() + parser.getSalida());
+
+            }
+        }else JOptionPane.showMessageDialog(this, "Entrada vacia","Error",1);
     }//GEN-LAST:event_CompileActionPerformed
     
     public void Leer(){

@@ -20,7 +20,7 @@ public class Si extends Operacion{
     private ArrayList<Operacion> Operaciones2;
     private Si SI;
     public Si(Tabla tabla,Condicion condicion,ArrayList<Operacion> Operaciones,ArrayList<Operacion> Operaciones2){
-        super(TipoOperacion.SI,tabla);
+        super(TipoOperacion.SI,tabla,0);
         this.condicion = condicion;
         this.Operaciones = Operaciones;
         this.Operaciones2 = Operaciones2;
@@ -28,7 +28,7 @@ public class Si extends Operacion{
     }
     
     public Si(Tabla tabla,Si Condicion,ArrayList<Operacion> Operaciones,ArrayList<Operacion> Operaciones2){
-        super(TipoOperacion.SI,tabla);
+        super(TipoOperacion.SI,tabla,0);
         this.SI = Condicion;
         this.Operaciones = Operaciones;
         this.Operaciones2 = Operaciones2;

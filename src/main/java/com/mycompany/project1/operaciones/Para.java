@@ -15,7 +15,7 @@ public class Para extends Operacion{
     private ArrayList<Operacion> Operaciones;
     private int I;
     public Para(Tabla tabla,ArrayList<Operacion> Operaciones,int i){
-        super(TipoOperacion.PARA,tabla);
+        super(TipoOperacion.PARA,tabla,0);
         this.Operaciones = Operaciones;
         this.I = i;
     }
@@ -23,8 +23,10 @@ public class Para extends Operacion{
     @Override
     public void Ejecutar(){
         setSalida("");
+        AsignarNuevaTabla(Operaciones, getTabla());
         for (int i = 0; i < I; i++) {
             EjecutarFunciones(Operaciones);
+            if(!this.getErrores().isEmpty())break;
         }
     }
     

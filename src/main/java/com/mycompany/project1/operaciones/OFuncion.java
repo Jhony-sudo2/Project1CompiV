@@ -29,8 +29,8 @@ public class OFuncion extends Operacion{
     private int TipoOperador = 0;
     private TablaFuncion Tabla;
     
-    public OFuncion(TablaFuncion tabla,String Nombre,int Retorno,ArrayList<Operacion> Operaciones,String ValorRetorno,ArrayList<Variable> Parametros){
-        super(TipoOperacion.FUNCION,tabla);
+    public OFuncion(TablaFuncion tabla,String Nombre,int Retorno,ArrayList<Operacion> Operaciones,String ValorRetorno,ArrayList<Variable> Parametros,int Linea){
+        super(TipoOperacion.FUNCION,tabla,Linea);
         this.Nombre = Nombre;
         this.Retorno = Retorno;
         this.Operaciones = Operaciones;
@@ -40,8 +40,8 @@ public class OFuncion extends Operacion{
         this.Tabla = tabla;
     }
     
-    public OFuncion(TablaFuncion tabla,Tabla tablap,String Nombre,ArrayList<String> Parametros2){
-        super(TipoOperacion.FUNCION,tablap);
+    public OFuncion(TablaFuncion tabla,Tabla tablap,String Nombre,ArrayList<String> Parametros2,int Linea){
+        super(TipoOperacion.FUNCION,tablap,Linea);
         this.TipoOperador = 2;
         this.Parametros2 = Parametros2;
         this.Nombre = Nombre;

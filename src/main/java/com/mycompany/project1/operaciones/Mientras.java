@@ -16,18 +16,20 @@ public class Mientras extends Operacion {
     private Condicion Condicion;
     private int ValorCondicion;
     public Mientras(ArrayList<Operacion> Operaciones, Condicion Condicion,Tabla tabla) {
-        super(TipoOperacion.MIENTRAS,tabla);
+        super(TipoOperacion.MIENTRAS,tabla,0);
         this.Operaciones = Operaciones;
         this.Condicion = Condicion;
     }
     
     public Mientras(Tabla tabla){
-        super(TipoOperacion.MIENTRAS,tabla);
+        super(TipoOperacion.MIENTRAS,tabla,0);
     }
 
     @Override
     public void Ejecutar(){
+        setSalida("");
         Manejador m = new Manejador(getTabla());
+        AsignarNuevaTabla(Operaciones, getTabla());
         ValorCondicion = m.Condicion(Condicion.getValor1(), Condicion.getValor2(), Condicion.getOperacion());
         while(ValorCondicion == 1){
             for (Operacion Op : Operaciones) {

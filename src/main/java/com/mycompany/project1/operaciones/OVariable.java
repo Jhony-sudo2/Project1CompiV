@@ -25,15 +25,15 @@ public class OVariable extends Operacion{
     private String ValorA;
     private OFuncion funcion;
     
-    public OVariable(Tabla tabla,int Tipo,String NombreVar,String Valor,int TipoOp){
-        super(TipoOperacion.VARIABLE,tabla);
+    public OVariable(Tabla tabla,int Tipo,String NombreVar,String Valor,int TipoOp,int Linea){
+        super(TipoOperacion.VARIABLE,tabla,Linea);
         this.Tipo = Tipo;
         this.Valor = Valor;
         this.NombreVar = NombreVar;
         this.TipoOp = TipoOp;
     }
-    public OVariable(Tabla tabla,int Tipo,String NombreVar,OFuncion Valor,int TipoOp){
-        super(TipoOperacion.VARIABLE,tabla);
+    public OVariable(Tabla tabla,int Tipo,String NombreVar,OFuncion Valor,int TipoOp,int Linea){
+        super(TipoOperacion.VARIABLE,tabla,Linea);
         this.Tipo = Tipo;
         this.funcion = Valor;
         this.NombreVar = NombreVar;

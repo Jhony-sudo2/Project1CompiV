@@ -24,8 +24,8 @@ public class Switch extends Operacion{
     private ArrayList<Casos>Lista;
     private String Tipo;
     private Operacion Defecto;
-    public Switch(Tabla tabla,String Tipo,Operacion defecto,ArrayList<Casos>Lista) {
-        super(TipoOperacion.SWITCH,tabla);
+    public Switch(Tabla tabla,String Tipo,Operacion defecto,ArrayList<Casos>Lista,int Linea) {
+        super(TipoOperacion.SWITCH,tabla,Linea);
         this.Tipo = Tipo;
         this.Defecto = defecto;
         this.Lista = Lista;

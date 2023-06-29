@@ -137,11 +137,11 @@ tipo            ::= ENTERO:n1  {:RESULT = 1;:}
                 |   DECIMAL:n1 {:RESULT = 2;:}
                 ;
 
-asignacion      ::= tipo:n2 ID:n1 IGUAL mensaje:n3   {:RESULT = new OVariable(tabla,n2,n1,n3,1);:}
-                |   tipo:n2 ID:n1                    {:RESULT = new OVariable(tabla,n2,n1,"",1);:}
-                |   ID:n1 IGUAL mensaje:n2           {:RESULT = new OVariable(tabla,1,n1,n2,2);:}
-                |   tipo:n2 ID:n1 IGUAL llamadaf:n3  {:RESULT = new OVariable(tabla,n2,n1,(OFuncion)n3,1);:}
-                |   ID:n1 IGUAL llamadaf:n2          {:RESULT = new OVariable(tabla,1,n1,(OFuncion)n2,2);:}
+asignacion      ::= tipo:n2 ID:n1 IGUAL:n4 mensaje:n3   {:RESULT = new OVariable(tabla,n2,n1,n3,1,n4.getLine());:}
+                |   tipo:n2 ID:n1                    {:RESULT = new OVariable(tabla,n2,n1,"",1,0);:}
+                |   ID:n1 IGUAL:n3 mensaje:n2           {:RESULT = new OVariable(tabla,1,n1,n2,2,n3.getLine());:}
+                |   tipo:n2 ID:n1 IGUAL:n4 llamadaf:n3  {:RESULT = new OVariable(tabla,n2,n1,(OFuncion)n3,1,n4.getLine());:}
+                |   ID:n1 IGUAL:n3 llamadaf:n2          {:RESULT = new OVariable(tabla,1,n1,(OFuncion)n2,2,n3.getLine());:}
                 ;
 
 si              ::= SI condicion:n1 LLAVE_A Initial:n2 LLAVE_C   {:RESULT = new Si(tabla,n1,n2,null);:}
@@ -165,7 +165,7 @@ para            ::= PARA PAREN_O  INT:n1 COMA INT:n2  PAREN_C {:RESULT = Math.ab
 mientras        ::= MIENTRAS condicion:n1 LLAVE_A Initial:n2 LLAVE_C  {:RESULT = new Mientras(n2,n1,tabla);:}
                 ;
 
-switch          ::= SWITCH switchCondicion:n1 LLAVE_A casos:n2     {:RESULT = new Switch(tabla,n1,n2,Casos); Casos = new ArrayList<Casos>();:}
+switch          ::= SWITCH:n3 switchCondicion:n1 LLAVE_A casos:n2     {:RESULT = new Switch(tabla,n1,n2,Casos,n3.getLine()); Casos = new ArrayList<Casos>();:}
                 ;
 
 switchCondicion ::= PAREN_O mensaje:n1 PAREN_C                     {:RESULT = n1;:} 
@@ -185,18 +185,18 @@ defecto         ::= DEFECTO DPUNTOS pr:n1  LLAVE_C                        {:RESU
                 |   LLAVE_C     
                 ;
 
-leer            ::= LEER PAREN_O ID:n1 PAREN_C    {:RESULT = new Salida(tabla,n1,2);:}
+leer            ::= LEER:n2 PAREN_O ID:n1 PAREN_C    {:RESULT = new Salida(tabla,n1,2,n2.getLine());:}
                 ;
 
 mensaje         ::= operacion:n1        {:RESULT =  n1;:}
                 ;
                 
-escribir        ::= ESCRIBIR PAREN_O mensaje:n1 PAREN_C    {:RESULT = new Salida(tabla,n1,1);:}
-                |   ESCRIBIR PAREN_O llamadaf:n1 PAREN_C       {:RESULT = new Salida(tabla,(OFuncion)n1);:}
+escribir        ::= ESCRIBIR:n2 PAREN_O mensaje:n1 PAREN_C    {:RESULT = new Salida(tabla,n1,1,n2.getLine());:}
+                |   ESCRIBIR:n2 PAREN_O llamadaf:n1 PAREN_C       {:RESULT = new Salida(tabla,(OFuncion)n1,n2.getLine());:}
                 ;
 
-funcion         ::= FUNCION tiporetorno:n2 ID:n1  PAREN_O parametros2:n5 LLAVE_A Initial:n3 retorno:n4  {:RESULT = new OFuncion(funciones,n1,n2,n3,n4,n5);:}
-                |   FUNCION tiporetorno:n2 ID:n1  PAREN_O parametros2:n5 LLAVE_A retorno:n4             {:RESULT = new OFuncion(funciones,n1,n2,null,n4,n5);:}
+funcion         ::= FUNCION:n6 tiporetorno:n2 ID:n1  PAREN_O parametros2:n5 LLAVE_A Initial:n3 retorno:n4  {:RESULT = new OFuncion(funciones,n1,n2,n3,n4,n5,n6.getLine());:}
+                |   FUNCION:n6 tiporetorno:n2 ID:n1  PAREN_O parametros2:n5 LLAVE_A retorno:n4             {:RESULT = new OFuncion(funciones,n1,n2,null,n4,n5,n6.getLine());:}
                 ;
 
 tiporetorno     ::= VOID    {:RESULT = 0;:}
@@ -217,7 +217,7 @@ parametros      ::= tipo:n1 ID:n2 COMA  parametros:n3       {:RESULT = UnirP(new
                 |   tipo:n1 ID:n2                     {:RESULT = RetornarP(new Variable(n2,n1));:}
                 ;
 
-llamadaf        ::= ID:n1 PAREN_O pllamada:n2     {:RESULT = new OFuncion(funciones,tabla,n1,n2);:}
+llamadaf        ::= ID:n1 PAREN_O:n3 pllamada:n2     {:RESULT = new OFuncion(funciones,tabla,n1,n2,n3.getLine());:}
                 ;
 
 pllamada        ::= parametrosllamada:n1 PAREN_C     {:RESULT = n1;:}
