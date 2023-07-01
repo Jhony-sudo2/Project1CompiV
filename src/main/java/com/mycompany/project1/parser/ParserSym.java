@@ -47,7 +47,7 @@ public class ParserSym {
   public static final int RETORNAR = 33;
   public static final int DEFECTO = 30;
   public static final String[] terminalNames = new String[] {
-  "Fin de Linea",
+  "EOF",
   "error",
   "ENTERO",
   "CADENA",

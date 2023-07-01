@@ -94,13 +94,13 @@ terminal String STRING,ID;
 //NO TERMINALES
 non terminal caso,caso2;
 
-non terminal Integer op,tipo,para,tiporetorno;
+non terminal Integer op,tipo,tiporetorno;
 
 non terminal Condicion condicion;
 
 non terminal Operacion production,pr,asignacion,casos,defecto,mientras,switch,si,bucle,escribir,leer,funcion,llamadaf;
 
-non terminal String mensaje,operacion,a,b,c,switchCondicion,retorno;
+non terminal String mensaje,operacion,a,b,c,switchCondicion,retorno,para;
 non terminal ArrayList<Operacion> Initial;
 non terminal ArrayList<Variable>  parametros,parametros2;
 non terminal ArrayList<String>    parametrosllamada,pllamada;
@@ -159,7 +159,7 @@ op              ::= MAYOR                       {:RESULT = 1;:}
                 |   DIFERENTE                   {:RESULT = 6;:}
                 ;
 
-para            ::= PARA PAREN_O  INT:n1 COMA INT:n2  PAREN_C {:RESULT = Math.abs(n1-n2);System.out.println("i: " + RESULT);:}
+para            ::= PARA PAREN_O  mensaje:n1 COMA mensaje:n2  PAREN_C {:RESULT = n2 + "-"+n1;System.out.println("i: " + RESULT);:}
                 ;
 
 mientras        ::= MIENTRAS condicion:n1 LLAVE_A Initial:n2 LLAVE_C  {:RESULT = new Mientras(n2,n1,tabla);:}

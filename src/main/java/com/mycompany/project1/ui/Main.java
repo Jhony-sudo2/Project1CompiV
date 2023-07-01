@@ -135,7 +135,6 @@ public class Main extends javax.swing.JFrame {
             try{
                 Lista = (ArrayList<Operacion>) parser.parse().value;
                 m.EjecutarSalidas(Lista);
-                parser.getM().Error(lexer.getErrores());
                 Salida.setText("");
                 Salida.setText(m.getMensaje() + parser.getSalida());
 

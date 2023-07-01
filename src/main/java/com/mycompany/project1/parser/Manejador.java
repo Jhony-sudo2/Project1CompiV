@@ -90,7 +90,7 @@ public class Manejador {
         return tmp.getTipo();
     }
     
-    public boolean Comparar(int Tipo,String Valor){
+    public static boolean Comparar(int Tipo,String Valor){
         return switch (Tipo) {
             case 1 -> isInt(Valor);
                 case 2 -> isDouble(Valor);
@@ -109,7 +109,7 @@ public class Manejador {
         }
     }
     
-    public  boolean isString(String Value){
+    public  static boolean isString(String Value){
         return true;
     }
     
